@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const { users } = require('../models')
+const { user } = require('../models')
 
 module.exports = async (req, res, next) => {
   try {
@@ -14,15 +14,10 @@ module.exports = async (req, res, next) => {
 
     const token = bearerToken.split("Bearer ")[1]
 
-    const payload = jwt.verify(token, "s")
+    const payload = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
 
-    // users.findByPk(payload.id).then(instance => {
-    //   req.user = instance
-    //   next()
-    // })
-
-    const user = await users.findByPk(payload.id)
-    req.user = user
+    const users = await user.findByPk(payload.id)
+    req.users = users
     next();
   } catch (e) {
     res.status(400).json({
