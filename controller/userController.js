@@ -69,18 +69,19 @@ const postUser = async (req, res) => {
       })
     }
     // minimal password
+    console.log(hashPassword);
 
-    const newUsers = await user.create({
-      name,
-      email,
-      no_telp,
-      password: hashPassword,
-      role
-    })
+    // const newUsers = await user.create({
+    //   name,
+    //   email,
+    //   no_telp,
+    //   password: hashPassword,
+    //   role
+    // })
 
     res.status(201).json({
       status: `Anda berhasil register sebagai ${role}`,
-      data: newUsers
+      // data: newUsers
     })
   } catch (error) {
     res.status(400).json({

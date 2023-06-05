@@ -16,9 +16,18 @@ module.exports = async (req, res, next) => {
 
     const payload = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
 
+
     const users = await user.findByPk(payload.id)
-    req.users = users
-    next();
+
+    if (users) {
+      req.users = users
+      next();
+    } else {
+      return res.status(400).json({
+        status: 'failed',
+        message: "Token invalid"
+      })
+    }
   } catch (e) {
     res.status(400).json({
       status: 'failed',
