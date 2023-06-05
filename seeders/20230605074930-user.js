@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -13,35 +13,38 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('users',[
+    await queryInterface.bulkInsert('users', [
       {
-        name: 'zeqeela',
-        email: 'alex@gmail.com',
-        password: 'aiuaa',
-        no_telp: '092138325283',
+        name: 'Fadhlan',
+        email: 'fadhlan@gmail.com',
+        password: 'fadhlan',
+        no_telp: '08636721232',
+        role: "admin",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'zeqeelaq',
-        email: 'alex@gmail.com',
-        password: 'aiuaa',
-        no_telp: '092138325283',
+        name: 'Zeqeelaq',
+        email: 'zeqeela@gmail.com',
+        password: 'zeqeela',
+        no_telp: '087367261732',
+        role: "user",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'zeqeelaw',
+        name: 'Alex',
         email: 'alex@gmail.com',
-        password: 'aiuaa',
-        no_telp: '092138325283',
+        password: 'alex',
+        no_telp: '08878738243',
+        role: "user",
         createdAt: new Date(),
         updatedAt: new Date()
       },
     ])
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *

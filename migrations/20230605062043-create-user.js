@@ -21,6 +21,9 @@ module.exports = {
       no_telp: {
         type: Sequelize.STRING
       },
+      role: {
+        type: Sequelize.ENUM(['superadmin', 'admin', 'user'])
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

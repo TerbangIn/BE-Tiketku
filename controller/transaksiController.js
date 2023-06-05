@@ -1,28 +1,26 @@
 const { transaksi } = require('../models')
 
-
-
-const testData = async (req,res) => {
-    try{
+const getTransaksi = async (req, res) => {
+    try {
         let data = await transaksi.findAll({
             include: ["user"]
         })
-        return res.status(201).json({
+        return res.status(200).json({
             status: 'success',
-            data: data
+            data
         })
-    }catch(err){
+    } catch (err) {
         return res.status(400).json({
             status: 'failed',
             message: err.message,
-          })
+        })
     }
 }
 
-const findData = async (req,res) => {
-    try{
+const findData = async (req, res) => {
+    try {
         let data = await transaksi.findAll({
-            where:{
+            where: {
                 id_user: 2
             },
             include: ["user"]
@@ -30,17 +28,17 @@ const findData = async (req,res) => {
 
         return res.status(201).json({
             status: 'success',
-            data: data
+            data
         })
-    }catch(err){
+    } catch (err) {
         return res.status(400).json({
             status: 'failed',
             message: err.message,
-          })
+        })
     }
 }
 
-module.exports ={
-    testData,
+module.exports = {
+    getTransaksi,
     findData
 }
