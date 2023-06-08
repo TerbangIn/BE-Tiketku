@@ -1,14 +1,24 @@
 const { user } = require('../models')
 const bcrypt = require('bcrypt')
+const Joi = require('joi')
 const jwt = require('jsonwebtoken')
 
 const getUsers = async (req, res) => {
   try {
     const data = await user.findAll()
-    res.status(200).json({
-      status: "success",
-      data
-    })
+
+    if (data.length) {
+      return res.status(200).json({
+        status: "success",
+        data
+      })
+    } else {
+      return res.status(200).json({
+        status: "Data tidak ada",
+        data: []
+      })
+    }
+
   } catch (error) {
     res.status(400).json({
       status: "success",
@@ -45,7 +55,7 @@ const getIdUser = async (req, res) => {
 
 const postUser = async (req, res) => {
   try {
-    const { name, password, role, email, no_telp } = req.body
+    const { name, password, role, ...rest } = req.body
 
     const hashPassword = bcrypt.hashSync(password, 10)
 
@@ -69,19 +79,17 @@ const postUser = async (req, res) => {
       })
     }
     // minimal password
-    console.log(hashPassword);
 
-    // const newUsers = await user.create({
-    //   name,
-    //   email,
-    //   no_telp,
-    //   password: hashPassword,
-    //   role
-    // })
+    const newUsers = await user.create({
+      name,
+      ...rest,
+      password: hashPassword,
+      role
+    })
 
     res.status(201).json({
       status: `Anda berhasil register sebagai ${role}`,
-      // data: newUsers
+      data: newUsers
     })
   } catch (error) {
     res.status(400).json({
@@ -92,25 +100,37 @@ const postUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  try {
-    const data = { ...req.body }
-    const id = req.params.id
+  const { name, password } = req.body
+  const id = req.params.id
 
-    const dataId = await user.findByPk(id)
+  const dataId = await user.findByPk(id)
 
-    // TODO: Validasi apakah id ada
-    if (dataId === null) {
-      res.status(404).json({
-        status: 'failed',
-        message: `Data dengan id ${id}, tidak ditemukan`
-      })
-    }
+  // TODO: Validasi apakah id ada
+  if (dataId === null) {
+    res.status(404).json({
+      status: 'failed',
+      message: `Data dengan id ${id}, tidak ditemukan`
+    })
+  }
 
-    const hashPassword = bcrypt.hashSync(data.password, 10)
+  const schema = Joi.object({
+    name: Joi.required(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).required().label("email"),
+    password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/, "password").required(),
+    no_telp: Joi.required().label("No Telp"),
+    role: Joi.valid("admin", "user")
+  })
+
+  const val = schema.validate(req.body)
+
+  if (!(val.error)) {
+    console.log(val);
+    const { password, ...rest } = val.value
+    const hashPassword = bcrypt.hashSync(password, 10)
 
     const Name = await user.findOne({
       where: {
-        name: data.name
+        name: name
       }
     })
     const userId = await user.findOne({
@@ -123,13 +143,14 @@ const updateUser = async (req, res) => {
     if (Name !== null && Name === userId) {
       return res.status(400).json({
         status: 'failed',
-        message: `name ${data.name} sudah ada`
+        message: `name ${name} sudah ada`
       })
     }
 
+
     await user.update({
-      ...data,
-      password: hashPassword
+      password: hashPassword,
+      ...rest
     }, {
       where: {
         id
@@ -139,20 +160,21 @@ const updateUser = async (req, res) => {
       status: 'success',
       message: `Data dengan index ${id} telah berhasil terupdate`
     })
-  } catch (err) {
+  } else {
+    // console.log(val);
+    const message = val.error.details[0].message
     res.status(400).json({
       status: "failed",
-      message: err.message
+      message
     })
   }
 }
 
 const deleteUser = async (req, res) => {
   try {
-    // const { name, price, stock } = req.body
     const id = req.params.id
 
-    const dataId = awai.findByPk(id)
+    const dataId = user.findByPk(id)
 
     // TODO: Validasi apakah id ada
     if (dataId === null) {
