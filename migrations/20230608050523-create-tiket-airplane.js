@@ -2,35 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('tiket_airplanes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
+      seat_id: {
+        type: Sequelize.INTEGER
+      },
+      flight_id: {
+        type: Sequelize.INTEGER
+      },
+      date_of_purchase: {
+        type: Sequelize.DATE
+      },
+      max_kg: {
         type: Sequelize.STRING
       },
-      password: {
+      type_of_class: {
         type: Sequelize.STRING
       },
-      first_name: {
-        type: Sequelize.STRING
-      },
-      last_name:{
-        allowNull: true,
-        type: Sequelize.STRING
-      },
-      phone_number: {
-        type: Sequelize.STRING
-      },
-      google_id:{
-        allowNull: true,
-        type: Sequelize.STRING
-      },
-      role: {
-        type: Sequelize.ENUM(['admin', 'user'])
+      price: {
+        type: Sequelize.DOUBLE
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('tiket_airplanes');
   }
 };

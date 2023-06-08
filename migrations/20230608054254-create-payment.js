@@ -2,35 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('payments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
+      type_of_payment: {
         type: Sequelize.STRING
       },
-      password: {
+      image_brand: {
         type: Sequelize.STRING
       },
-      first_name: {
-        type: Sequelize.STRING
-      },
-      last_name:{
-        allowNull: true,
-        type: Sequelize.STRING
-      },
-      phone_number: {
-        type: Sequelize.STRING
-      },
-      google_id:{
-        allowNull: true,
-        type: Sequelize.STRING
-      },
-      role: {
-        type: Sequelize.ENUM(['admin', 'user'])
+      price: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('payments');
   }
 };

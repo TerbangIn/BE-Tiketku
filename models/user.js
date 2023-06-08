@@ -14,10 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   user.init({
-    name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     no_telp: DataTypes.STRING,
+    first_name: DataTypes.STRING,
+    last_name: DataTypes.STRING,
+    identity_number: DataTypes.BIGINT,
+    address: DataTypes.STRING,
+   
+    phone_number: DataTypes.STRING,
+    gender: DataTypes.ENUM(['Male','Female']),
+    google_id: DataTypes.STRING,
     role: {
       type: DataTypes.ENUM(['admin', 'user']),
       defaultValue: 'user'
