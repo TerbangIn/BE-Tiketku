@@ -1,16 +1,16 @@
-const { user } = require('../models')
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const jwt = require('jsonwebtoken')
+const {user} = require('../models/')
 
 const getUsers = async (req, res) => {
+  const data = await user.findAll()
   try {
-    const data = await user.findAll()
-
+    
     if (data.length) {
       return res.status(200).json({
         status: "success",
-        data
+        data : data
       })
     } else {
       return res.status(200).json({

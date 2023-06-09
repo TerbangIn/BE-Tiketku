@@ -2,15 +2,24 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('bookings', {
+    await queryInterface.createTable('notifications', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ticket_id: {
-        type: Sequelize.INTEGER
+      tag: {
+        type: Sequelize.ENUM(['Promosi','Notifikasi'])
+      },
+      title: {
+        type: Sequelize.TEXT
+      },
+      desc: {
+        type: Sequelize.STRING
+      },
+      user_id: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -23,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('bookings');
+    await queryInterface.dropTable('notifications');
   }
 };

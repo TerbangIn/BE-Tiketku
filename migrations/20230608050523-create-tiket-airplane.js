@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('tiket_airplanes', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV1,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       seat_id: {
         type: Sequelize.INTEGER
@@ -22,10 +22,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       type_of_class: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM(['Economy Class','Business Class','First Class','Premium Class'])
+      },
+      type_of_passenger:{
+        type: Sequelize.ENUM(['Adult','Child','Baby'])
       },
       price: {
         type: Sequelize.DOUBLE
+      },
+      passenger_id:{
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
