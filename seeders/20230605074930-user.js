@@ -12,35 +12,38 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-
+    const { v4: uuidv4 } = require('uuid');
     await queryInterface.bulkInsert('users', [
       {
-        name: 'Fadhlan',
+        id: uuidv4(),
+        first_name: 'Fadhlan',
         email: 'fadhlan@gmail.com',
         password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
-        no_telp: '08636721232',
+        phone_number: '08636721232',
         role: "admin",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Zeqeelaq',
-        email: 'zeqeela@gmail.com',
-        password: '$2b$10$TVQDyNqsWnENO0tDPCOXoe6OygwAZPYU9IM.JSSc6LaI2VikauwAS',
-        no_telp: '087367261732',
-        role: "user",
+        id: uuidv4(),
+        first_name: 'Fadhlan',
+        email: 'fadhlan@gmail.com',
+        password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
+        phone_number: '08636721232',
+        role: "admin",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Alex',
-        email: 'alex@gmail.com',
-        password: '$2b$10$wX4QHyBhTBcrkNM0MpUdTOH/XQGgADV31KyI6bdloWd1Ay00U49/y',
-        no_telp: '08878738243',
-        role: "user",
+        id: uuidv4(),
+        first_name: 'Fadhlan E',
+        email: 'fadhlana@gmail.com',
+        password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
+        phone_number: '08636721232',
+        role: "admin",
         createdAt: new Date(),
         updatedAt: new Date()
-      },
+      }
     ])
   },
 

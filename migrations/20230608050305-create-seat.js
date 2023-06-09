@@ -13,10 +13,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       ticket_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        allowNull: true
       },
       flight_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      status: {
+        type: Sequelize.ENUM(['Available','Unavailable']),
+        defaultValue: 'Available'
       },
       createdAt: {
         allowNull: false,

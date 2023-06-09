@@ -5,12 +5,12 @@ module.exports = {
     await queryInterface.createTable('passengers', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
-      booking_id: {
-        type: Sequelize.INTEGER
+      title: {
+        type: Sequelize.STRING
       },
       first_name: {
         type: Sequelize.STRING

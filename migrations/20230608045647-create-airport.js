@@ -15,7 +15,10 @@ module.exports = {
       code: {
         type: Sequelize.STRING
       },
-      location: {
+      city: {
+        type: Sequelize.STRING
+      },
+      country:{
         type: Sequelize.STRING
       },
       createdAt: {
@@ -25,7 +28,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {

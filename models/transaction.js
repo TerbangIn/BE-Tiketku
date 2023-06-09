@@ -11,28 +11,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.user,{
-        foreignKey: "user_id",
-        as: "user"
-      })
+      // this.hasMany(models.user,{
+      //   foreignKey: "user_id",
+      //   as: "users"
+      // })
 
-      this.belongsTo(models.payment,{
-        foreignKey: "payment_id",
-        as: "payment"
-      })
+      // this.belongsTo(models.payment,{
+      //   foreignKey: "payment_id",
+      //   as: "payment"
+      // })
 
-      this.hasMany(models.booking,{
-        foreignKey: "booking_id",
-        as: "booking"
-      })
+      // this.hasMany(models.ticket_airplane,{
+      //   foreignKey: "ticket_id",
+      //   as: "ticket"
+      // })
     }
   }
   transaction.init({
-    booking_id: DataTypes.INTEGER,
-    payment_id: DataTypes.INTEGER,
-    user_id: DataTypes.INTEGER,
+    ticket_id: DataTypes.STRING,
+    payment_id: DataTypes.STRING,
+    user_id: DataTypes.STRING,
+    status: DataTypes.STRING,
     total_price: DataTypes.DOUBLE,
-    trans_date: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'transaction',

@@ -11,21 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.flight,{
-        foreignKey: "flight_id",
-        as: "flight"
-      })
+      // this.belongsTo(models.flight,{
+      //   foreignKey: "flight_id",
+      //   as: "flight"
+      // })
 
-      this.belongsTo(models.ticket_airplane,{
-        foreignKey: "ticket_id",
-        as: "ticket"
-      })
+      // this.belongsTo(models.ticket_airplane,{
+      //   foreignKey: "ticket_id",
+      //   as: "ticket"
+      // })
     }
   }
   seat.init({
     seat_number: DataTypes.STRING,
-    ticket_id: DataTypes.INTEGER,
-    flight_id: DataTypes.INTEGER
+    ticket_id: DataTypes.STRING,
+    flight_id: DataTypes.INTEGER,
+    status: DataTypes.ENUM(['Available', 'Unavailable']),
   }, {
     sequelize,
     modelName: 'seat',
