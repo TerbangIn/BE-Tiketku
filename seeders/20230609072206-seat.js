@@ -13,17 +13,29 @@ module.exports = {
      * }], {});
     */
     // const { v4: uuidv4 } = require('uuid');
-    const dummy = randSeatNumber({length: 10});
-    Promise.all(
-      dummy.map(async (data) => {
-        await queryInterface.bulkInsert('seats', [{
-          seat_number: data,
-          status: "Available",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }], {});
-      })
-    )
+    const dummy = []
+    for (let i = 0; i < 15;i++){
+      for (let j = 1; j <= 6;j++){
+        let result = `${(i+10).toString(36).toUpperCase()}${j}`
+        dummy.push(result)
+      }
+    }
+
+    for (let i = 1; i <= 7; i++){
+      Promise.all(
+        dummy.map(async (data) => {
+          await queryInterface.bulkInsert('seats', [{
+            seat_number: data,
+            flight_id: i,
+            status: "Available",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }], {});
+        })
+      )
+    }
+      
+    
   },
 
   async down (queryInterface, Sequelize) {

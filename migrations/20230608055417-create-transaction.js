@@ -10,13 +10,16 @@ module.exports = {
         type: Sequelize.UUID
       },
       ticket_id:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       payment_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       user_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       status: {
         type: Sequelize.ENUM(['Unpaid','Issued','Cancelled']),

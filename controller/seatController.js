@@ -1,9 +1,8 @@
-const { flight } = require('../models')
+const { seat } = require('../models')
 
 const getData = async (req,res) => {
     try{
-        data = await flight.findAll({
-            include: ["information","source","destination","seat"]
+        data = await seat.findAll({
         })
         console.log(data)
         if(data){
