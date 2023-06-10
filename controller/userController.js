@@ -13,7 +13,7 @@ const getUsers = async (req, res) => {
         data: data
       })
     } else {
-      return res.status(200).json({
+      return res.status(500).json({
         status: "Data tidak ada",
         data: []
       })
@@ -40,7 +40,7 @@ const getIdUser = async (req, res) => {
         data
       })
     } else {
-      res.status(404).json({
+      res.status(500).json({
         status: 'failed',
         message: `Data dengan id ${id}, tidak ditemukan`
       })
@@ -55,53 +55,53 @@ const getIdUser = async (req, res) => {
 
 const postUser = async (req, res) => {
   const schema = Joi.object({
-    name: Joi.string().min(2).required(),
+    first_name: Joi.string().min(2).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).required().label("email"),
     password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/, "password").required(),
-    no_telp: Joi.string().pattern(/^(^\+62\s?|^0)(\d{10,14})$/, "No Telp").required().label("No Telp"),
+    phone_number: Joi.string().pattern(/^(^\+62\s?|^0)(\d{10,14})$/, "No Telp").required().label("No Telp"),
     role: Joi.valid("admin", "user")
   })
 
   const val = schema.validate(req.body)
 
   if (!(val.error)) {
-    try {
-      const { name, password, role, ...rest } = val
+    // try {
+    const { first_name, password, role, ...rest } = val.value
 
-      const hashPassword = bcrypt.hashSync(password, 10)
+    const hashPassword = bcrypt.hashSync(password, 10)
 
-      // TODO: name sudah ada
-      const Name = await user.findOne({
-        where: {
-          name
-        }
-      })
-
-      if (Name !== null) {
-        return res.status(404).json({
-          status: 'failed',
-          message: `Nama ${name} sudah ada`
-        })
+    // TODO: name sudah ada
+    const Name = await user.findOne({
+      where: {
+        first_name
       }
-      // minimal password
+    })
 
-      const newUsers = await user.create({
-        name,
-        ...rest,
-        password: hashPassword,
-        role
-      })
-
-      res.status(201).json({
-        status: `Anda berhasil register sebagai ${role}`,
-        data: newUsers
-      })
-    } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message
+    if (Name !== null) {
+      return res.status(500).json({
+        status: 'failed',
+        message: `Nama ${first_name} sudah ada`
       })
     }
+    // minimal password
+
+    const data = await user.create({
+      first_name,
+      ...rest,
+      password: hashPassword,
+      role
+    })
+
+    res.status(201).json({
+      status: `Anda berhasil register sebagai ${role}`,
+      data
+    })
+    // } catch (error) {
+    //   res.status(400).json({
+    //     status: "failed",
+    //     message: error.message
+    //   })
+    // }
   } else {
     const message = val.error.details[0].message
     res.status(400).json({
@@ -118,7 +118,7 @@ const updateUser = async (req, res) => {
 
   // TODO: Validasi apakah id ada
   if (dataId === null) {
-    res.status(404).json({
+    res.status(500).json({
       status: 'failed',
       message: `Data dengan id ${id}, tidak ditemukan`
     })
@@ -136,47 +136,47 @@ const updateUser = async (req, res) => {
 
   if (!(val.error)) {
     // console.log(val);
-    try {
-      const { name, password, ...rest } = val.value
-      const hashPassword = bcrypt.hashSync(password, 10)
+    // try {
+    const { name, password, ...rest } = val.value
+    const hashPassword = bcrypt.hashSync(password, 10)
 
-      const Name = await user.findOne({
-        where: {
-          name: name
-        }
-      })
-      const userId = await user.findOne({
-        where: {
-          id
-        }
-      })
-
-      // TODO: Validasi apakah name sudah ada
-      if (Name !== null && Name === userId) {
-        return res.status(400).json({
-          status: 'failed',
-          message: `name ${name} sudah ada`
-        })
+    const Name = await user.findOne({
+      where: {
+        name: name
       }
+    })
+    const userId = await user.findOne({
+      where: {
+        id
+      }
+    })
 
-      await user.update({
-        password: hashPassword,
-        ...rest
-      }, {
-        where: {
-          id
-        }
-      })
-      res.status(200).json({
-        status: 'success',
-        message: `Data dengan index ${id} telah berhasil terupdate`
-      })
-    } catch (err) {
-      res.status(400).json({
-        status: 'success',
-        message: err.message
+    // TODO: Validasi apakah name sudah ada
+    if (Name !== null && Name === userId) {
+      return res.status(400).json({
+        status: 'failed',
+        message: `name ${name} sudah ada`
       })
     }
+
+    await user.update({
+      password: hashPassword,
+      ...rest
+    }, {
+      where: {
+        id
+      }
+    })
+    res.status(200).json({
+      status: 'success',
+      message: `Data dengan index ${id} telah berhasil terupdate`
+    })
+    // } catch (err) {
+    //   res.status(400).json({
+    //     status: 'success',
+    //     message: err.message
+    //   })
+    // }
   } else {
     // console.log(val);
     const message = val.error.details[0].message
@@ -195,7 +195,7 @@ const deleteUser = async (req, res) => {
 
     // TODO: Validasi apakah id ada
     if (dataId === null) {
-      res.status(404).json({
+      res.status(500).json({
         status: 'failed',
         message: `Data dengan id ${id}, tidak ditemukan`
       })
@@ -228,23 +228,20 @@ const login = async (req, res) => {
       }
     })
 
-
     if (!users) {
-      return res.status(404).json({
+      return res.status(500).json({
         status: 'failed',
-        message: `email ${email} tidak ditemukan`
+        message: `Data dengan email ${email}, tidak ditemukan`
       })
     }
 
-    console.log(bcrypt.compareSync(password, users.password), password, users.password);
+    // console.log(bcrypt.compareSync(password, users.password), password, users.password);
     if (users && bcrypt.compareSync(password, users.password)) {
       const token = jwt.sign({
         id: users.id,
         email: users.email,
         role: users.role
       }, process.env.JWT_SIGNATURE_KEY)
-      // name sudah ada
-      // minimal password
 
       res.status(200).json({
         status: `Anda berhasil login sebagai ${users.role}`,
@@ -254,7 +251,7 @@ const login = async (req, res) => {
         }
       })
     } else {
-      res.status(500).json({
+      res.status(409).json({
         status: "failed",
         message: `Periksa kembali email dan password anda`
       })

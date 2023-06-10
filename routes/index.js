@@ -9,6 +9,12 @@ const Flight = require('./flight')
 const Seat = require("./seat")
 const Passenger = require("./passenger")
 const Tiket = require('./tiket')
+const swagger = require('swagger-ui-express')
+
+const swaggerDocument = require("../docs/swagger.json")
+
+router.use("/api-docs", swagger.serve)
+router.get("/api-docs", swagger.setup(swaggerDocument))
 router.use('/api/v1/transaksi', auth, Transaksi)
 router.use('/api/v1/user', User)
 router.use('/api/v1/airport', Airport)

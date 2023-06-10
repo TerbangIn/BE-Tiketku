@@ -16,31 +16,21 @@ module.exports = {
     await queryInterface.bulkInsert('users', [
       {
         id: uuidv4(),
-        first_name: 'Fadhlan',
-        email: 'fadhlan@gmail.com',
-        password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
-        phone_number: '08636721232',
+        first_name: 'Saya Admin',
+        email: 'sayaadmin@gmail.com',
+        password: '$2b$10$Qe5wvk8nnm7RHVuDTP152uRbEO1qZDHGSnC082ArCXxp2RH4.DOiC',
+        phone_number: '08123456789',
         role: "admin",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: uuidv4(),
-        first_name: 'Fadhlan',
-        email: 'fadhlan@gmail.com',
-        password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
-        phone_number: '08636721232',
-        role: "admin",
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: uuidv4(),
-        first_name: 'Fadhlan E',
-        email: 'fadhlana@gmail.com',
-        password: '$2b$10$v1BBU3ligvQbQGjBaCYhsuLiqk0QU9elvcDQx.XIfsPle/FkDE4Ce',
-        phone_number: '08636721232',
-        role: "admin",
+        first_name: 'Saya User',
+        email: 'sayauser@gmail.com',
+        password: '$2b$10$A.QAZVOlE2hfaKjBAtdbd.RGiG16.xk5NR4DYjfwYW7P6peGp8q8y',
+        phone_number: '088888888888',
+        role: "user",
         createdAt: new Date(),
         updatedAt: new Date()
       }
