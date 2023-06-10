@@ -33,10 +33,6 @@ module.exports = {
       capacity: {
         type: Sequelize.INTEGER
       },
-      seat_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
       economy_class_price: {
         type: Sequelize.DOUBLE,
         allowNull: true

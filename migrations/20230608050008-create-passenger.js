@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('passengers', {
       id: {
         allowNull: false,
-        defaultValue: Sequelize.UUIDV4,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID
+        type: Sequelize.INTEGER
       },
       title: {
         type: Sequelize.STRING
@@ -16,7 +16,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       last_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       date_of_birth: {
         type: Sequelize.DATE
@@ -31,7 +32,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       expired_date:{
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

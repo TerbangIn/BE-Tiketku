@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "information"
       })
 
+      this.hasMany(models.seat,{
+        foreignKey: "flight_id",
+        as: "seat"
+      })
+
       this.belongsTo(models.airport,{
         foreignKey: "source_airport",
         as: "source"
@@ -25,8 +30,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "destination_airport",
         as: "destination"
       })
-
-
     }
   }
   flight.init({
@@ -38,7 +41,6 @@ module.exports = (sequelize, DataTypes) => {
     departure_date: DataTypes.DATE,
     arrival_date: DataTypes.DATE,
     capacity: DataTypes.INTEGER,
-    seat_id: DataTypes.STRING,
     economy_class_price: DataTypes.DOUBLE,
     business_class_price: DataTypes.DOUBLE,
     first_class_price: DataTypes.DOUBLE,

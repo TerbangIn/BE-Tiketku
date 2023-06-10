@@ -14,7 +14,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    const dummy = randFlightDetails({length: 10});
+    const dummy = randFlightDetails({length: 5});
     Promise.all(
       dummy.map(async (data) => {
         await queryInterface.bulkInsert('flights', [{
@@ -30,7 +30,6 @@ module.exports = {
           adult_price_percentage: 100,
           child_price_percentage: 60,
           baby_price_percentage: 0,
-          seat_id: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         }], {});

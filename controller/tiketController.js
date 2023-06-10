@@ -1,9 +1,9 @@
-const { flight } = require('../models')
+const { tiket_airplane } = require('../models')
 
 const getData = async (req,res) => {
     try{
-        data = await flight.findAll({
-            include: ["information","source","destination","seat"]
+        data = await tiket_airplane.findAll({
+            include: ["seat","flight","passenger"]
         })
         console.log(data)
         if(data){
@@ -18,8 +18,11 @@ const getData = async (req,res) => {
             })
         }
         
-    }catch{
-
+    }catch(error){
+        res.status(400).json({
+            status: "failed",
+            message: error.message
+          })
     }
 }
 

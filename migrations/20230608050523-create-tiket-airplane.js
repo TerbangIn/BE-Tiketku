@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.createTable('tiket_airplanes', {
       id: {
         allowNull: false,
-        defaultValue: Sequelize.UUIDV1,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         type: Sequelize.UUID
       },
@@ -14,9 +14,6 @@ module.exports = {
       },
       flight_id: {
         type: Sequelize.INTEGER
-      },
-      date_of_purchase: {
-        type: Sequelize.DATE
       },
       max_kg: {
         type: Sequelize.STRING
@@ -31,6 +28,9 @@ module.exports = {
         type: Sequelize.DOUBLE
       },
       passenger_id:{
+        type: Sequelize.INTEGER
+      },
+      transaction_id:{
         type: Sequelize.STRING
       },
       createdAt: {
