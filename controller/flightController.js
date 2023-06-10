@@ -1,28 +1,147 @@
 const { flight } = require('../models')
 
-const getData = async (req,res) => {
-    try{
-        data = await flight.findAll({
-            include: ["information","source","destination","seat"]
-        })
-        console.log(data)
-        if(data){
+const getFlight = async (req, res) => {
+    data = await flight.findAll({
+        order: [["id", "Asc"]],
+        include: ["source", "destination"]
+    })
+
+    try {
+        if (data.length) {
             return res.status(200).json({
                 status: "success",
-                data : data
+                data: data
             })
-        }else{
+        } else {
             return res.status(200).json({
-                status: "success",
-                data : "tidak ada"
+                status: "Data tidak ada",
+                data: []
             })
         }
-        
-    }catch{
 
+    } catch (error) {
+        res.status(400).json({
+            status: "success",
+            message: error.message
+        })
+    }
+}
+
+const getIdFlight = async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = await flight.findByPk(id)
+
+        // TODO: Validasi apakah id ada
+        if (data === null) {
+            return res.status(404).json({
+                status: 'failed',
+                message: `Data dengan id ${id}, tidak ditemukan`
+            })
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "failed",
+            message: err.message
+        })
+    }
+}
+
+const postFlight = async (req, res) => {
+    try {
+        const datas = req.body
+
+        const data = await flight.create({
+            datas
+        })
+
+        res.status(201).json({
+            status: 'success',
+            data
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: "failed",
+            message: error.message
+        })
+    }
+}
+
+const updateFlight = async (req, res) => {
+    try {
+        const datas = req.body
+        const id = req.params.id
+
+        const dataId = await flight.findByPk(id)
+
+        // TODO: Validasi apakah id ada
+        if (dataId === null) {
+            res.status(404).json({
+                status: 'failed',
+                message: `Data dengan id ${id}, tidak ditemukan`
+            })
+        }
+
+        await flight.update({
+            datas
+        }, {
+            where: {
+                id
+            }
+        })
+        res.status(200).json({
+            status: 'success',
+            message: `Data dengan index ${id} telah berhasil terupdate`
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "failed",
+            message: err.message
+        })
+    }
+}
+
+const deleteFlight = async (req, res) => {
+    try {
+        const id = req.params.id
+
+        const dataId = await flight.findByPk(id)
+
+        // TODO: Validasi apakah id ada
+        if (dataId === null) {
+            res.status(404).json({
+                status: 'failed',
+                message: `Data dengan id ${id}, tidak ditemukan`
+            })
+        }
+
+        await flight.destroy({
+            where: {
+                id
+            }
+        })
+
+        res.status(200).json({
+            status: 'success',
+            message: `Data dengan index ${id} telah berhasil terhapus`
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "failed",
+            message: err.message
+        })
     }
 }
 
 module.exports = {
-    getData
+    getFlight,
+    getIdFlight,
+    postFlight,
+    updateFlight,
+    deleteFlight
 }

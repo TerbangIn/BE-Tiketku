@@ -15,7 +15,6 @@ module.exports = {
     const { v4: uuidv4 } = require('uuid');
     await queryInterface.bulkInsert('users', [
       {
-        id: uuidv4(),
         first_name: 'Saya Admin',
         email: 'sayaadmin@gmail.com',
         password: '$2b$10$Qe5wvk8nnm7RHVuDTP152uRbEO1qZDHGSnC082ArCXxp2RH4.DOiC',
@@ -25,7 +24,6 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: uuidv4(),
         first_name: 'Saya User',
         email: 'sayauser@gmail.com',
         password: '$2b$10$A.QAZVOlE2hfaKjBAtdbd.RGiG16.xk5NR4DYjfwYW7P6peGp8q8y',

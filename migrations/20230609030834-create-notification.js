@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       tag: {
-        type: Sequelize.ENUM(['Promosi','Notifikasi'])
+        type: Sequelize.ENUM(['Promosi', 'Notifikasi'])
       },
       title: {
         type: Sequelize.TEXT
@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       user_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
