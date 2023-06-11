@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(routes)
 
-app.listen(PORT,"0.0.0.0", () => {
+app.listen(PORT, () => {
     console.log(`Server running on ${Date(Date.now)}`)
     console.log(`Server listening on port : http://localhost:${PORT}`)
 })
