@@ -14,7 +14,6 @@ const Notification = require('./notification')
 const swagger = require('swagger-ui-express')
 
 const swaggerDocument = require("../docs/swagger.json")
-
 router.use("/api-docs", swagger.serve)
 router.get("/api-docs", swagger.setup(swaggerDocument))
 router.use('/api/v1/transaksi', auth, Transaksi)
@@ -28,5 +27,8 @@ router.use('/api/v1/tiket', Tiket)
 router.use('/api/v1/notification', Notification)
 router.use(notFound)
 router.use(error)
+router.use("/" ,(req,res) => {
+    res.send("API Running")
+})
 
 module.exports = router
