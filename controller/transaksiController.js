@@ -1,8 +1,8 @@
-const { transaksi } = require('../models')
+const { transaction } = require('../models')
 
 const getTransaksi = async (req, res) => {
     try {
-        let data = await transaksi.findAll({
+        let data = await transaction.findAll({
             include: ["user"]
         })
         return res.status(200).json({
