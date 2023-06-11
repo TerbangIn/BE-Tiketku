@@ -1,13 +1,19 @@
 {
   "name": "be-tiketku",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aplikasi Pesan Tiket Pesawat",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "test": "jest",
+    "dev": "nodemon index.js",
+    "db:create": "sequelize db:create",
+    "db:migrate": "sequelize db:migrate",
+    "db:seed": "sequelize db:seed:all",
+    "db:drop": "sequelize db:drop",
+    "db:rollback": "sequelize db:migrate:undo:all"
   },
-  "author": "",
+  "author": "BE-Tiketku{C8}",
   "license": "ISC",
   "dependencies": {
     "@ngneat/falso": "^6.4.0",
