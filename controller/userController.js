@@ -1,8 +1,26 @@
+require('dotenv').config()
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const jwt = require('jsonwebtoken')
 const { user } = require('../models/')
+const nodemailer = require('nodemailer')
 
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  service: 'gmail',
+  port:567,
+  secure: false, // true for 465, false for other ports
+  logger: true,
+  debug: true,
+  secureConnection: false,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+  tls:{
+    rejectUnAuthorized:true
+}
+})
 const getUsers = async (req, res) => {
   const data = await user.findAll()
 
@@ -219,6 +237,59 @@ const deleteUser = async (req, res) => {
   }
 }
 
+const otp = async (req,res) => {
+  try{
+      const id = req.params.id
+      let generatedOTP = () => {
+        let digit = '0123456789'
+        let OTP = ''
+        for (let i = 0; i <= 6; i++){
+          OTP += digit[Math.floor(Math.random() * 10)];
+        }
+        return OTP;
+      }
+      
+      let otp = generatedOTP()
+      
+      await user.update({
+        otp: otp
+      }, {
+        where: {
+          id
+        }
+      })
+      const dataId = await user.findByPk(id)
+      // transporter.verify().then(console.log).catch(console.error);
+      const mailData = {
+        from : process.env.EMAIL,
+        to: dataId.email,
+        subject: `OTP For Verify`,
+        text: `This is Your OTP`,
+        html: `<b> ${otp} </b>`
+      }
+      console.log(process.env.EMAIL)
+      await transporter.sendMail(mailData, async (err, info) => {
+        if(err){
+          res.status(400).json({
+            status: "failed",
+            message: err.message
+          })
+        }
+        res.status(200).json({
+          status: 'success',
+          message: info.response
+        })
+      })
+
+      
+  }catch(err){
+    res.status(400).json({
+      status: "failed",
+      message: err.message
+    })
+  }
+}
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
@@ -272,5 +343,6 @@ module.exports = {
   postUser,
   updateUser,
   deleteUser,
-  login
+  login,
+  otp
 }
