@@ -11,6 +11,10 @@
   },
   "servers": [
     {
+      "url": "https://be-tiketku-production.up.railway.app/api/v1",
+      "description": "Production server"
+    },
+    {
       "url": "https://743b-103-162-237-17.ngrok-free.app/api/v1/",
       "description": "Stagging server"
     },
@@ -288,7 +292,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotFound"
+                  "$ref": "#/components/schemas/NoData"
                 }
               }
             }
@@ -346,7 +350,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotFound"
+                  "$ref": "#/components/schemas/NoData"
                 }
               }
             }
@@ -542,6 +546,1846 @@
           }
         ]
       }
+    },
+    "/flight/": {
+      "get": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Get flights",
+        "description": "Get all flights.",
+        "operationId": "getAllFlight",
+        "responses": {
+          "200": {
+            "description": "Success get all flights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Flights"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Create data flight",
+        "description": "Can create flight data.",
+        "operationId": "createFlight",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Flight"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success get data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data flight berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Flights"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/flight/{id}": {
+      "get": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Get flight",
+        "description": "Get flight by id.",
+        "operationId": "getFlightById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of flight to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get flights by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flights"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Update flight",
+        "description": "Update flight data.",
+        "operationId": "updateFlight",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of flight to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated flight object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Flight"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update flight",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Delete flight",
+        "description": "Delete flight by id.",
+        "operationId": "deleteFlightById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of flight to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete flight",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/airport/": {
+      "get": {
+        "tags": [
+          "Airport"
+        ],
+        "summary": "Get airports",
+        "description": "Get all airports.",
+        "operationId": "getAllAirport",
+        "responses": {
+          "200": {
+            "description": "Success get all airports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Airports"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Airport"
+        ],
+        "summary": "Create data airport",
+        "description": "Can create airport data.",
+        "operationId": "createAirport",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success get data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data airport berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Airports"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/airport/{id}": {
+      "get": {
+        "tags": [
+          "Airport"
+        ],
+        "summary": "Get airport",
+        "description": "Get airport by id.",
+        "operationId": "getAirportById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of airport to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get airports by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airports"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Airport"
+        ],
+        "summary": "Update airport",
+        "description": "Update airport data.",
+        "operationId": "updateAirport",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of airport to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated airport object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update airport",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Airport"
+        ],
+        "summary": "Delete airport",
+        "description": "Delete airport by id.",
+        "operationId": "deleteAirportById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of airport to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete airport",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/seat/": {
+      "get": {
+        "tags": [
+          "Seat"
+        ],
+        "summary": "Get seats",
+        "description": "Get all seats.",
+        "operationId": "getAllSeat",
+        "responses": {
+          "200": {
+            "description": "Success get all seats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Seats"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Seat"
+        ],
+        "summary": "Create data seat",
+        "description": "Can create seat data.",
+        "operationId": "createSeat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Seat"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success get data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data seat berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Seats"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/seat/{id}": {
+      "get": {
+        "tags": [
+          "Seat"
+        ],
+        "summary": "Get seat",
+        "description": "Get seat by id.",
+        "operationId": "getSeatById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of seat to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get seats by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Seats"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Seat"
+        ],
+        "summary": "Update seat",
+        "description": "Update seat data.",
+        "operationId": "updateSeat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of seat to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated seat object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Seat"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update seat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Seat"
+        ],
+        "summary": "Delete seat",
+        "description": "Delete seat by id.",
+        "operationId": "deleteSeatById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of seat to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete seat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/information/": {
+      "get": {
+        "tags": [
+          "Information Flight"
+        ],
+        "summary": "Get informations",
+        "description": "Get all informations.",
+        "operationId": "getAllInformation",
+        "responses": {
+          "200": {
+            "description": "Success get all informations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Informations"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Information Flight"
+        ],
+        "summary": "Create data information flight",
+        "description": "Can create information flight data.",
+        "operationId": "createInformation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Information"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success get data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data information berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Informations"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/information/{id}": {
+      "get": {
+        "tags": [
+          "Information Flight"
+        ],
+        "summary": "Get information flight",
+        "description": "Get information flight by id.",
+        "operationId": "getInformationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of information to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get informations by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Informations"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Information Flight"
+        ],
+        "summary": "Update information flight",
+        "description": "Update information flight data.",
+        "operationId": "updateInformation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of information to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated information object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Information"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Information Flight"
+        ],
+        "summary": "Delete information flight",
+        "description": "Delete information flight by id.",
+        "operationId": "deleteInformationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of information to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/notification/": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Get notifications",
+        "description": "Get all notifications.",
+        "operationId": "getAllNotification",
+        "responses": {
+          "200": {
+            "description": "Success get all notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Notifications"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Create data notification",
+        "description": "Can create notification data.",
+        "operationId": "createNotification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success get data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data notification berhasil ditambahkan"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Notifications"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/notification/{id}": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Get notification",
+        "description": "Get notification by id.",
+        "operationId": "getNotificationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of notification to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get notifications by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notifications"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Update notification",
+        "description": "Update notification data.",
+        "operationId": "updateNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of notification to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated notification object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Delete notification",
+        "description": "Delete notification by id.",
+        "operationId": "deleteNotificationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of notification to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -657,6 +2501,430 @@
           "updatedAt": {
             "type": "string",
             "example": "2023-05-04T14:20:27.537Z"
+          }
+        }
+      },
+      "Flight": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "example": "https://upload.wikimedia.org/wikipedia/commons/b/b0/AdamAir_logo.png"
+          },
+          "flight_number": {
+            "type": "string",
+            "example": "1783728"
+          },
+          "airline": {
+            "type": "string",
+            "example": "Aerolineas Argentinas"
+          },
+          "source_airport": {
+            "type": "integer",
+            "example": 1
+          },
+          "destination_airport": {
+            "type": "integer",
+            "example": 2
+          },
+          "departure_airport": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "arrival_date": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "capacity": {
+            "type": "integer",
+            "example": 50
+          },
+          "economy_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "business_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "first_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "premium_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "adult_price_percentage": {
+            "type": "integer",
+            "example": 100
+          },
+          "child_price_percentage": {
+            "type": "integer",
+            "example": 60
+          },
+          "baby_price_percentage": {
+            "type": "integer",
+            "example": 0
+          }
+        },
+        "required": [
+          "image",
+          "flight_number",
+          "airline",
+          "source_airport",
+          "destination_airport",
+          "departure_airport",
+          "arrival_date",
+          "capacity",
+          "economy_class_price",
+          "business_class_price",
+          "first_class_price",
+          "premium_price",
+          "adult_price_percentage",
+          "child_price_percentage",
+          "baby_price_percentage"
+        ]
+      },
+      "Flights": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "image": {
+            "type": "string",
+            "example": "https://upload.wikimedia.org/wikipedia/commons/b/b0/AdamAir_logo.png"
+          },
+          "flight_number": {
+            "type": "string",
+            "example": "1783728"
+          },
+          "airline": {
+            "type": "string",
+            "example": "Aerolineas Argentinas"
+          },
+          "source_airport": {
+            "type": "integer",
+            "example": 1
+          },
+          "destination_airport": {
+            "type": "integer",
+            "example": 2
+          },
+          "departure_airport": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "arrival_date": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "capacity": {
+            "type": "integer",
+            "example": 50
+          },
+          "economy_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "business_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "first_class_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "premium_price": {
+            "type": "integer",
+            "example": 50000
+          },
+          "adult_price_percentage": {
+            "type": "integer",
+            "example": 100
+          },
+          "child_price_percentage": {
+            "type": "integer",
+            "example": 60
+          },
+          "baby_price_percentage": {
+            "type": "integer",
+            "example": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Airports"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Airports"
+          }
+        }
+      },
+      "Airport": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Istanbul Atatürk Airport"
+          },
+          "code": {
+            "type": "string",
+            "example": "IST"
+          },
+          "city": {
+            "type": "string",
+            "example": "Istanbul"
+          },
+          "country": {
+            "type": "string",
+            "example": "Turkey"
+          }
+        },
+        "required": [
+          "name",
+          "code",
+          "city",
+          "country"
+        ]
+      },
+      "Airports": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "example": "Istanbul Atatürk Airport"
+          },
+          "code": {
+            "type": "string",
+            "example": "IST"
+          },
+          "city": {
+            "type": "string",
+            "example": "Istanbul"
+          },
+          "country": {
+            "type": "string",
+            "example": "Turkey"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          }
+        }
+      },
+      "Seat": {
+        "type": "object",
+        "properties": {
+          "seat_number": {
+            "type": "string",
+            "example": "A1"
+          },
+          "ticket_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "flight_id": {
+            "type": "integer",
+            "example": 2
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Unavailable"
+            ]
+          }
+        },
+        "required": [
+          "seat_number",
+          "ticket_id",
+          "flight_id",
+          "status"
+        ]
+      },
+      "Seats": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "seat_number": {
+            "type": "string",
+            "example": "A1"
+          },
+          "ticket_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "flight_id": {
+            "type": "integer",
+            "example": 2
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Unavailable"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          }
+        }
+      },
+      "Information": {
+        "type": "object",
+        "properties": {
+          "flight_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Bagasi 2kg"
+          }
+        },
+        "required": [
+          "flight_id",
+          "name"
+        ]
+      },
+      "Informations": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "flight_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Bagasi 2kg"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": "string",
+            "example": "Notification",
+            "enum": [
+              "Notification",
+              "Promosi"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "Transaksimu belum dibayar"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Segera lakukan pembayaran pada transaksi anda."
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          }
+        },
+        "required": [
+          "tag",
+          "title",
+          "desc",
+          "user_id"
+        ]
+      },
+      "Notifications": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "tag": {
+            "type": "string",
+            "example": "Notification",
+            "enum": [
+              "Notification",
+              "Promosi"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "Transaksimu belum dibayar"
+          },
+          "desc": {
+            "type": "string",
+            "example": "Segera lakukan pembayaran pada transaksi anda."
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "user": {
+            "$ref": "#/components/schemas/Users"
+          }
+        }
+      },
+      "NoData": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "failed"
+          },
+          "data": {
+            "type": "array",
+            "example": [ ]
           }
         }
       },

@@ -1,4 +1,4 @@
-const { information } = require('../models')
+const { information_flight } = require('../models')
 
 const getInformation = async (req, res) => {
   data = await information_flight.findAll({
@@ -12,7 +12,7 @@ const getInformation = async (req, res) => {
         data: data
       })
     } else {
-      return res.status(200).json({
+      return res.status(500).json({
         status: "Data tidak ada",
         data: []
       })
@@ -20,7 +20,7 @@ const getInformation = async (req, res) => {
 
   } catch (error) {
     res.status(400).json({
-      status: "success",
+      status: "failed",
       message: error.message
     })
   }
@@ -40,7 +40,7 @@ const getIdInformation = async (req, res) => {
     }
 
     res.status(200).json({
-      status: 'success',
+      status: 'Data flight berhasil ditambahkan',
       data
     })
   } catch (err) {

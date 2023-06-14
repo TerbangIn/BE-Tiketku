@@ -5,6 +5,9 @@ This is a project for Final Project in Binar Academy.
 - [Brahmasta Bagus Aryandra](https://github.com/Brahmastabagus)
 - [Muhammad Fadhlan Aqila](https://github.com/zodplugin)
 
+## Tech Stack  
+Node, Express, Sequelize, PostgreSQL, Swagger
+
 ## Run Locally  
 
 Clone the project  
@@ -38,8 +41,10 @@ npx sequelize db:seed:all
 Start the server  
 
 ~~~bash  
-npm run start
+npm run dev
 ~~~
+
+[API Documentation](http://localhost:{PORT}/api-docs)
 
 ## Note  
 

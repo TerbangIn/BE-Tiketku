@@ -13,7 +13,7 @@ const getTiket = async (req, res) => {
                 data: data
             })
         } else {
-            return res.status(200).json({
+            return res.status(500).json({
                 status: "Data tidak ada",
                 data: []
             })

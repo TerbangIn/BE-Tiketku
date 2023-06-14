@@ -120,7 +120,7 @@ const updateAirport = async (req, res) => {
             }
         })
 
-        if (nameAirport !== null && nameAirport.id != id) {
+        if (nameAirport !== null && nameAirport.dataValues.id === Number(id)) {
             return res.status(404).json({
                 status: 'failed',
                 message: `Nama ${name} sudah ada`
@@ -133,7 +133,7 @@ const updateAirport = async (req, res) => {
             }
         })
 
-        if (codeAirport !== null && codeAirport.id != id) {
+        if (codeAirport !== null && codeAirport.dataValues.id === Number(id)) {
             return res.status(404).json({
                 status: 'failed',
                 message: `Code ${code} sudah ada`

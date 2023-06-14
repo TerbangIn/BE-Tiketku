@@ -54,9 +54,9 @@ const getIdPassenger = async (req, res) => {
 
 const postPassenger = async (req, res) => {
     const schema = Joi.object({
-        title: Joi.valid("admin", "user"),
+        title: Joi.valid("Tn.", "Mr.", "Mrs."),
         first_name: Joi.string().required(),
-        last_name: Joi.string(),
+        last_name: Joi.optional(),
         date_of_birth: Joi.date().required(),
         country: Joi.string().required(),
         identity_number: Joi.string().min(8).required(),
@@ -66,7 +66,6 @@ const postPassenger = async (req, res) => {
 
     const val = schema.validate(req.body)
 
-    // try {
     if (!(val.error)) {
         const datas = val.value
 
@@ -74,10 +73,17 @@ const postPassenger = async (req, res) => {
             datas
         })
 
-        res.status(201).json({
-            status: 'success',
-            data
-        })
+        try {
+            res.status(201).json({
+                status: 'success',
+                data
+            })
+        } catch (error) {
+            res.status(400).json({
+                status: "failed",
+                message: error.message
+            })
+        }
     } else {
         const message = val.error.details[0].message
         res.status(400).json({
@@ -85,28 +91,36 @@ const postPassenger = async (req, res) => {
             message
         })
     }
-    // } catch (error) {
-    //     res.status(400).json({
-    //         status: "failed",
-    //         message: error.message
-    //     })
-    // }
 }
 
 const updatePassenger = async (req, res) => {
-    try {
-        const datas = req.body
-        const id = req.params.id
+    const id = req.params.id
 
-        const dataId = await passenger.findByPk(id)
+    const dataId = await passenger.findByPk(id)
 
-        // TODO: Validasi apakah id ada
-        if (dataId === null) {
-            res.status(404).json({
-                status: 'failed',
-                message: `Data dengan id ${id}, tidak ditemukan`
-            })
-        }
+    // TODO: Validasi apakah id ada
+    if (dataId === null) {
+        res.status(404).json({
+            status: 'failed',
+            message: `Data dengan id ${id}, tidak ditemukan`
+        })
+    }
+
+    const schema = Joi.object({
+        title: Joi.valid("Tn.", "Mr.", "Mrs."),
+        first_name: Joi.string().required(),
+        last_name: Joi.optional(),
+        date_of_birth: Joi.date().required(),
+        country: Joi.string().required(),
+        identity_number: Joi.string().min(8).required(),
+        identity_number_of_country: Joi.string().required(),
+        expired_date: Joi.date().greater('now').required()
+    })
+
+    const val = schema.validate(req.body)
+
+    if (!(val.error)) {
+        const datas = val.value
 
         await passenger.update({
             datas
@@ -115,14 +129,23 @@ const updatePassenger = async (req, res) => {
                 id
             }
         })
-        res.status(200).json({
-            status: 'success',
-            message: `Data dengan index ${id} telah berhasil terupdate`
-        })
-    } catch (err) {
+
+        try {
+            res.status(200).json({
+                status: 'success',
+                message: `Data dengan index ${id} telah berhasil terupdate`
+            })
+        } catch (err) {
+            res.status(400).json({
+                status: "failed",
+                message: err.message
+            })
+        }
+    } else {
+        const message = val.error.details[0].message
         res.status(400).json({
             status: "failed",
-            message: err.message
+            message
         })
     }
 }
