@@ -130,7 +130,7 @@ const postUser = async (req, res) => {
         expiration_time : AddMinutesToDate(new Date(),1)
       }, {
         where: {
-          id
+         email
         }
       })
       const datauser = await user.findByPk({
@@ -141,7 +141,7 @@ const postUser = async (req, res) => {
       // transporter.verify().then(console.log).catch(console.error);
       const mailData = {
         from : process.env.EMAIL,
-        to: datauser.email,
+        to: email,
         subject: `OTP For Verify`,
         text: `This is Your OTP`,
         html: `<b> ${otp} </b>`
