@@ -16,10 +16,11 @@ module.exports = {
     await queryInterface.bulkInsert('users', [
       {
         first_name: 'Saya Admin',
-        email: 'sayaadmin@gmail.com',
+        email: 'zodplugin@gmail.com',
         password: '$2b$10$Qe5wvk8nnm7RHVuDTP152uRbEO1qZDHGSnC082ArCXxp2RH4.DOiC',
         phone_number: '08123456789',
         role: "admin",
+        verified: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -28,6 +29,7 @@ module.exports = {
         email: 'sayauser@gmail.com',
         password: '$2b$10$A.QAZVOlE2hfaKjBAtdbd.RGiG16.xk5NR4DYjfwYW7P6peGp8q8y',
         phone_number: '088888888888',
+        verified: true,
         role: "user",
         createdAt: new Date(),
         updatedAt: new Date()

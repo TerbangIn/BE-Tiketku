@@ -9,6 +9,7 @@ router.post("/register", userController.postUser)
 router.post("/login", userController.login)
 router.put('/:id', auth, checkRole(["admin", "user"]), userController.updateUser)
 router.delete('/:id', auth, checkRole(["admin", "user"]), userController.deleteUser)
-router.post("/otp/:id",auth,checkRole(["user","admin"]),userController.otp);
+router.post("/otp",auth,checkRole(["user","admin"]),userController.otp);
+router.post("/verify", userController.verify)
 
 module.exports = router

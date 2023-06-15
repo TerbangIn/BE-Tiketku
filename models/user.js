@@ -25,6 +25,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'user'
     },
     otp: DataTypes.STRING,
+    verified: DataTypes.BOOLEAN,
+    expiration_time: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'user',

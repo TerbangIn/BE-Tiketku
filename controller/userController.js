@@ -5,6 +5,10 @@ const jwt = require('jsonwebtoken')
 const { user } = require('../models/')
 const nodemailer = require('nodemailer')
 
+function AddMinutesToDate(date, minutes) {
+  return new Date(date.getTime() + minutes*60000);
+}
+
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   service: 'gmail',
@@ -110,9 +114,45 @@ const postUser = async (req, res) => {
         role
       })
 
-      res.status(201).json({
-        status: `Anda berhasil register sebagai ${role}`,
-        data
+      let generatedOTP = () => {
+        let digit = '0123456789'
+        let OTP = ''
+        for (let i = 0; i <= 6; i++){
+          OTP += digit[Math.floor(Math.random() * 10)];
+        }
+        return OTP;
+      }
+      
+      let otp = generatedOTP()
+      
+      await user.update({
+        otp: otp,
+        expiration_time : AddMinutesToDate(new Date(),1)
+      }, {
+        where: {
+          id
+        }
+      })
+      const dataId = await user.findByPk(data.id)
+      // transporter.verify().then(console.log).catch(console.error);
+      const mailData = {
+        from : process.env.EMAIL,
+        to: dataId.email,
+        subject: `OTP For Verify`,
+        text: `This is Your OTP`,
+        html: `<b> ${otp} </b>`
+      }
+      await transporter.sendMail(mailData, async (err, info) => {
+        if(err){
+          res.status(400).json({
+            status: "failed",
+            message: err.message
+          })
+        }
+        res.status(201).json({
+          status: `Anda berhasil register sebagai ${role}. Silahkan verify otp kamu`,
+          data
+        })
       })
     } catch (error) {
       res.status(400).json({
@@ -239,7 +279,7 @@ const deleteUser = async (req, res) => {
 
 const otp = async (req,res) => {
   try{
-      const id = req.params.id
+      const email = req.body.email
       let generatedOTP = () => {
         let digit = '0123456789'
         let OTP = ''
@@ -252,17 +292,18 @@ const otp = async (req,res) => {
       let otp = generatedOTP()
       
       await user.update({
-        otp: otp
+        otp: otp,
+        expiration_time : AddMinutesToDate(new Date(),1)
       }, {
         where: {
-          id
+          email
         }
       })
-      const dataId = await user.findByPk(id)
+      const dataId = await user.findOne({where: { email }})
       // transporter.verify().then(console.log).catch(console.error);
       const mailData = {
         from : process.env.EMAIL,
-        to: dataId.email,
+        to: email,
         subject: `OTP For Verify`,
         text: `This is Your OTP`,
         html: `<b> ${otp} </b>`
@@ -290,6 +331,35 @@ const otp = async (req,res) => {
   }
 }
 
+const   verify = async (req, res) => {
+  try{
+    const {email,otp} = req.body
+    const users = await user.findOne({where:{email}})
+    if(users){
+      if(users.otp===otp){
+        await user.update({
+          verified:true
+        },{
+          where:{
+            email:email
+          }
+        })
+        res.status(200).json({
+          status: 'success',
+          message: `Berhasil Verifikasi`
+        })
+
+
+      }
+    }
+  }catch(err){
+    res.status(400).json({
+      status: "failed",
+      message: err.message
+    })
+  }
+} 
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
@@ -308,20 +378,27 @@ const login = async (req, res) => {
     }
 
     // console.log(bcrypt.compareSync(password, users.password), password, users.password);
-    if (users && bcrypt.compareSync(password, users.password)) {
-      const token = jwt.sign({
-        id: users.id,
-        email: users.email,
-        role: users.role
-      }, process.env.JWT_SIGNATURE_KEY)
-
-      res.status(200).json({
-        status: `Anda berhasil login sebagai ${users.role}`,
-        data: {
-          users,
-          token
-        }
-      })
+    if (users && bcrypt.compareSync(password, users.password )) {
+      if(users.verified){
+        const token = jwt.sign({
+          id: users.id,
+          email: users.email,
+          role: users.role
+        }, process.env.JWT_SIGNATURE_KEY)
+  
+        res.status(200).json({
+          status: `Anda berhasil login sebagai ${users.role}`,
+          data: {
+            users,
+            token
+          }
+        })
+      }else{
+        res.status(409).json({
+          status: "failed",
+          message: `Silahkan verify akun anda`
+        })
+      }
     } else {
       res.status(409).json({
         status: "failed",
@@ -344,5 +421,6 @@ module.exports = {
   updateUser,
   deleteUser,
   login,
-  otp
+  otp,
+  verify
 }

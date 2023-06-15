@@ -37,6 +37,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      expiration_time:{
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      verified:{
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
