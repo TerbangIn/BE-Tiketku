@@ -331,7 +331,7 @@ const otp = async (req,res) => {
   }
 }
 
-const   verify = async (req, res) => {
+const verify = async (req, res) => {
   try{
     const {email,otp} = req.body
     const users = await user.findOne({where:{email}})
