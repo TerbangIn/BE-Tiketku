@@ -336,7 +336,7 @@ const verify = async (req, res) => {
     const {email,otp} = req.body
     const users = await user.findOne({where:{email}})
     if(users){
-      if(users.otp===otp){
+      if(users.otp===otp&&(Date.parse(users.expiration_time) > Date.parse())){
         await user.update({
           verified:true
         },{
