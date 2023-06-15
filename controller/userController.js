@@ -133,11 +133,15 @@ const postUser = async (req, res) => {
           id
         }
       })
-      const dataId = await user.findByPk(data.id)
+      const datauser = await user.findByPk({
+        where:{
+          email
+        }
+      })
       // transporter.verify().then(console.log).catch(console.error);
       const mailData = {
         from : process.env.EMAIL,
-        to: dataId.email,
+        to: datauser.email,
         subject: `OTP For Verify`,
         text: `This is Your OTP`,
         html: `<b> ${otp} </b>`
