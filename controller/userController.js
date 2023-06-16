@@ -2,7 +2,7 @@ require('dotenv').config()
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const jwt = require('jsonwebtoken')
-const { user } = require('../models/')
+const { user } = require('../models')
 const nodemailer = require('nodemailer')
 
 function AddMinutesToDate(date, minutes) {
