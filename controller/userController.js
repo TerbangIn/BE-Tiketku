@@ -127,21 +127,16 @@ const postUser = async (req, res) => {
       
       await user.update({
         otp: otp,
-        expiration_time : AddMinutesToDate(new Date(),1)
+        expiration_time : AddMinutesToDate(new Date(),10)
       }, {
         where: {
-          id
-        }
-      })
-      const datauser = await user.findByPk({
-        where:{
           email
         }
       })
       // transporter.verify().then(console.log).catch(console.error);
       const mailData = {
         from : process.env.EMAIL,
-        to: datauser.email,
+        to: email,
         subject: `OTP For Verify`,
         text: `This is Your OTP`,
         html: `<b> ${otp} </b>`
@@ -297,7 +292,7 @@ const otp = async (req,res) => {
       
       await user.update({
         otp: otp,
-        expiration_time : AddMinutesToDate(new Date(),1)
+        expiration_time : AddMinutesToDate(new Date(),10)
       }, {
         where: {
           email
