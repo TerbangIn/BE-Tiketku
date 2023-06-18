@@ -117,7 +117,7 @@ const postUser = async (req, res) => {
       let generatedOTP = () => {
         let digit = '0123456789'
         let OTP = ''
-        for (let i = 0; i <= 6; i++){
+        for (let i = 1; i <= 6; i++){
           OTP += digit[Math.floor(Math.random() * 10)];
         }
         return OTP;
@@ -282,7 +282,7 @@ const otp = async (req,res) => {
       let generatedOTP = () => {
         let digit = '0123456789'
         let OTP = ''
-        for (let i = 0; i <= 6; i++){
+        for (let i = 1; i <= 6; i++){
           OTP += digit[Math.floor(Math.random() * 10)];
         }
         return OTP;
