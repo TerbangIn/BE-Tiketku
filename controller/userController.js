@@ -168,6 +168,43 @@ const postUser = async (req, res) => {
   }
 }
 
+const verifyForgetPassword = async (req, res) => {
+  try{
+    const {email,otp,password,confirm_password} = req.body
+    const users = await user.findOne({where:{email}})
+    if(users && users.otp === otp){
+      if(password === confirm_password){
+        await user.update({
+          password: password
+        }, {
+          where: {
+            email
+          }
+        })
+        res.status(200).json({
+          status: 'success',
+          message: `Berhasil Mengganti Password`
+        })
+      }else{
+        res.status(400).json({
+          status: "failed",
+          message: "Password tidak sesuai"
+        })
+      }
+    }else{
+      res.status(400).json({
+        status: "failed",
+        message: "Email dan otp tidak sesuai"
+      })
+    }
+  }catch(err){
+    res.status(400).json({
+      status: "failed",
+      message: err.message
+    })
+  }
+}
+
 const updateUser = async (req, res) => {
   const id = req.params.id
 
@@ -443,5 +480,6 @@ module.exports = {
   deleteUser,
   login,
   otp,
-  verify
+  verify,
+  verifyForgetPassword
 }
