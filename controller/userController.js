@@ -6,13 +6,13 @@ const { user } = require('../models')
 const nodemailer = require('nodemailer')
 
 function AddMinutesToDate(date, minutes) {
-  return new Date(date.getTime() + minutes*60000);
+  return new Date(date.getTime() + minutes * 60000);
 }
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   service: 'gmail',
-  port:567,
+  port: 567,
   secure: false, // true for 465, false for other ports
   logger: true,
   debug: true,
@@ -21,9 +21,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL,
     pass: process.env.PASSWORD,
   },
-  tls:{
-    rejectUnAuthorized:true
-}
+  tls: {
+    rejectUnAuthorized: true
+  }
 })
 const getUsers = async (req, res) => {
   const data = await user.findAll()
@@ -117,17 +117,17 @@ const postUser = async (req, res) => {
       let generatedOTP = () => {
         let digit = '0123456789'
         let OTP = ''
-        for (let i = 1; i <= 6; i++){
+        for (let i = 1; i <= 6; i++) {
           OTP += digit[Math.floor(Math.random() * 10)];
         }
         return OTP;
       }
-      
+
       let otp = generatedOTP()
-      
+
       await user.update({
         otp: otp,
-        expiration_time : AddMinutesToDate(new Date(),10)
+        expiration_time: AddMinutesToDate(new Date(), 10)
       }, {
         where: {
           email
@@ -135,21 +135,21 @@ const postUser = async (req, res) => {
       })
       // transporter.verify().then(console.log).catch(console.error);
       const mailData = {
-        from : process.env.EMAIL,
+        from: process.env.EMAIL,
         to: email,
         subject: `OTP For Verify`,
         text: `This is Your OTP`,
         html: `<b> ${otp} </b>`
       }
       await transporter.sendMail(mailData, async (err, info) => {
-        if(err){
+        if (err) {
           res.status(400).json({
             status: "failed",
             message: err.message
           })
         }
         res.status(201).json({
-          status: `Anda berhasil register sebagai ${role}. Silahkan verify otp kamu`,
+          status: `Anda berhasil register sebagai ${role ?? "user"}. Silahkan verify otp kamu`,
           data
         })
       })
@@ -276,53 +276,67 @@ const deleteUser = async (req, res) => {
   }
 }
 
-const otp = async (req,res) => {
-  try{
-      const email = req.body.email
-      let generatedOTP = () => {
-        let digit = '0123456789'
-        let OTP = ''
-        for (let i = 1; i <= 6; i++){
-          OTP += digit[Math.floor(Math.random() * 10)];
-        }
-        return OTP;
-      }
-      
-      let otp = generatedOTP()
-      
-      await user.update({
-        otp: otp,
-        expiration_time : AddMinutesToDate(new Date(),10)
-      }, {
-        where: {
-          email
-        }
-      })
-      const dataId = await user.findOne({where: { email }})
-      // transporter.verify().then(console.log).catch(console.error);
-      const mailData = {
-        from : process.env.EMAIL,
-        to: email,
-        subject: `OTP For Verify`,
-        text: `This is Your OTP`,
-        html: `<b> ${otp} </b>`
-      }
-      console.log(process.env.EMAIL)
-      await transporter.sendMail(mailData, async (err, info) => {
-        if(err){
-          res.status(400).json({
-            status: "failed",
-            message: err.message
-          })
-        }
-        res.status(200).json({
-          status: 'success',
-          message: info.response
-        })
-      })
+const otp = async (req, res) => {
+  try {
+    const email = req.body.email
 
-      
-  }catch(err){
+    const Email = await user.findOne({
+      where: {
+        email
+      }
+    })
+
+    if (Email === null) {
+      return res.status(500).json({
+        status: 'failed',
+        message: `Email ${email} tidak ada`
+      })
+    }
+
+    let generatedOTP = () => {
+      let digit = '0123456789'
+      let OTP = ''
+      for (let i = 1; i <= 6; i++) {
+        OTP += digit[Math.floor(Math.random() * 10)];
+      }
+      return OTP;
+    }
+
+    let otp = generatedOTP()
+
+    await user.update({
+      otp: otp,
+      expiration_time: AddMinutesToDate(new Date(), 10)
+    }, {
+      where: {
+        email
+      }
+    })
+    const dataId = await user.findOne({ where: { email } })
+    // transporter.verify().then(console.log).catch(console.error);
+    const mailData = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: `OTP For Verify`,
+      text: `This is Your OTP`,
+      html: `<b> ${otp} </b>`
+    }
+    // console.log(process.env.EMAIL)
+    await transporter.sendMail(mailData, async (err, info) => {
+      if (err) {
+        res.status(400).json({
+          status: "failed",
+          message: err.message
+        })
+      }
+      res.status(200).json({
+        status: 'success',
+        message: info.response
+      })
+    })
+
+
+  } catch (err) {
     res.status(400).json({
       status: "failed",
       message: err.message
@@ -331,41 +345,41 @@ const otp = async (req,res) => {
 }
 
 const verify = async (req, res) => {
-  try{
-    const {email,otp} = req.body
-    const users = await user.findOne({where:{email}})
-    if(users){
-      if((users.otp===otp) && (Date.parse(users.expiration_time) > Date.parse(new Date()))){
+  try {
+    const { email, otp } = req.body
+    const users = await user.findOne({ where: { email } })
+    if (users) {
+      if ((users.otp === otp) && (Date.parse(users.expiration_time) > Date.parse(new Date()))) {
         await user.update({
-          verified:true
-        },{
-          where:{
-            email:email
+          verified: true
+        }, {
+          where: {
+            email: email
           }
         })
         res.status(200).json({
           status: 'success',
-          message: `Berhasil Verifikasi`
+          message: `Anda Berhasil Verifikasi`
         })
-      }else{
-        res.status(400).json({
+      } else {
+        res.status(409).json({
           status: "failed",
-          message: "Gagal Verifikasi"
+          message: "Periksa kembali otp anda"
         })
       }
-    }else{
-      res.status(400).json({
+    } else {
+      res.status(500).json({
         status: "failed",
         message: "Email tidak terdaftar"
       })
     }
-  }catch(err){
+  } catch (err) {
     res.status(400).json({
       status: "failed",
       message: err.message
     })
   }
-} 
+}
 
 const login = async (req, res) => {
   try {
@@ -385,14 +399,14 @@ const login = async (req, res) => {
     }
 
     // console.log(bcrypt.compareSync(password, users.password), password, users.password);
-    if (users && bcrypt.compareSync(password, users.password )) {
-      if(users.verified){
+    if (users && bcrypt.compareSync(password, users.password)) {
+      if (users.verified) {
         const token = jwt.sign({
           id: users.id,
           email: users.email,
           role: users.role
         }, process.env.JWT_SIGNATURE_KEY)
-  
+
         res.status(200).json({
           status: `Anda berhasil login sebagai ${users.role}`,
           data: {
@@ -400,8 +414,8 @@ const login = async (req, res) => {
             token
           }
         })
-      }else{
-        res.status(409).json({
+      } else {
+        res.status(400).json({
           status: "failed",
           message: `Silahkan verify akun anda`
         })

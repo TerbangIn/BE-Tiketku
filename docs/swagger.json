@@ -147,7 +147,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Res400"
+                  "type": "array",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Silahkan verify akun anda"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkNjg5MjAzLWFkNzgtNDQ0Ny05NjYwLTk0MDU3MjQ1NDdkNCIsImVtYWlsIjoic2F5YWFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY4NjM4MDE3Mn0.N2X1rFLTYMzonoJuVZ5rVy2IBqHIAt6CrvGQWPSeBl0"
+                    }
+                  }
                 }
               }
             }
@@ -203,7 +213,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "example": "Anda berhasil register sebagai user"
+                      "example": "Anda berhasil register sebagai user. Silahkan verify otp kamu"
                     },
                     "data": {
                       "$ref": "#/components/schemas/Users"
@@ -249,6 +259,186 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/verify": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Verify otp",
+        "description": "Verify otp.",
+        "operationId": "verifyOtp",
+        "requestBody": {
+          "description": "Created otp object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "saya@gmail.com"
+                  },
+                  "otp": {
+                    "type": "string",
+                    "example": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success verify otp",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Anda Berhasil Verifikasi"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Periksa kembali otp anda"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email saya@gmail.com tidak terdaftar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/otp": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get otp",
+        "description": "Get new otp.",
+        "operationId": "getNewOtp",
+        "requestBody": {
+          "description": "Created otp object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "saya@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success get new otp",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "200 2.0.0 ok 12345678 aa-898493o8493je89fe99e000 - gsmtp"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email saya@gmail.com tidak ada"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
                 }
               }
             }
@@ -820,16 +1010,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Failed bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Res400"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1186,16 +1366,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Res404"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Failed bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Res400"
                 }
               }
             }
@@ -1558,16 +1728,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Failed bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Res400"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1927,16 +2087,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Failed bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Res400"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1967,6 +2117,385 @@
         "responses": {
           "200": {
             "description": "Success delete information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/passenger/": {
+      "get": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Get passengers",
+        "description": "Get all passengers.",
+        "operationId": "getAllPassenger",
+        "responses": {
+          "200": {
+            "description": "Success get all passengers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Passengers"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Create data passenger",
+        "description": "Can create passenger data.",
+        "operationId": "createPassenger",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passenger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success create data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data passenger berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Passengers"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/passenger/{id}": {
+      "get": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Get passenger",
+        "description": "Get passenger by id.",
+        "operationId": "getPassengerById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of passenger to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get passengers by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Passengers"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Update passenger",
+        "description": "Update passenger data.",
+        "operationId": "updatePassenger",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of passenger to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated passenger object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Passenger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Delete passenger",
+        "description": "Delete passenger by id.",
+        "operationId": "deletePassengerById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of passenger to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete passenger",
             "content": {
               "application/json": {
                 "schema": {
@@ -2291,16 +2820,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Failed bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Res400"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2493,6 +3012,14 @@
           "otp": {
             "type": "integer",
             "example": "12345"
+          },
+          "verified": {
+            "type": "boolean",
+            "example": false
+          },
+          "expiration_date": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
           },
           "createdAt": {
             "type": "string",
@@ -2832,6 +3359,103 @@
           "name": {
             "type": "string",
             "example": "Bagasi 2kg"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          }
+        }
+      },
+      "Passenger": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Mr."
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Michella"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Nezuko"
+          },
+          "date_of_country": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "country": {
+            "type": "string",
+            "example": "Jepang"
+          },
+          "identity_number": {
+            "type": "integer",
+            "example": "3289138921832"
+          },
+          "identity_number_of_country": {
+            "type": "string",
+            "example": "Jepang"
+          },
+          "expired_date": {
+            "type": "string",
+            "example": "2025-05-04T14:20:27.537Z"
+          }
+        },
+        "required": [
+          "title",
+          "first_name",
+          "last_name",
+          "date_of_country",
+          "country",
+          "identity_number",
+          "identity_number_of_country",
+          "expired_date"
+        ]
+      },
+      "Passengers": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "title": {
+            "type": "string",
+            "example": "Mr."
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Michella"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Nezuko"
+          },
+          "date_of_country": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "country": {
+            "type": "string",
+            "example": "Jepang"
+          },
+          "identity_number": {
+            "type": "integer",
+            "example": "3289138921832"
+          },
+          "identity_number_of_country": {
+            "type": "string",
+            "example": "Jepang"
+          },
+          "expired_date": {
+            "type": "string",
+            "example": "2025-05-04T14:20:27.537Z"
           },
           "createdAt": {
             "type": "string",
