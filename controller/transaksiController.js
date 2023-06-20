@@ -58,10 +58,7 @@ const deleteTransaksi = async (req, res) => {
 const getTransaksi = async (req, res) => {
     try {
         let data = await transaction.findAll({
-            include: [{
-                model: models.ticket_airplane,
-                include: [models.ticket_airplane.seat,models.ticket_airplane.flight]
-            }]
+            include: ["flight"]
         })
         return res.status(200).json({
             status: 'success',
