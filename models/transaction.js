@@ -21,10 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       //   as: "payment"
       // })
 
-      // this.hasMany(models.ticket_airplane,{
-      //   foreignKey: "ticket_id",
-      //   as: "ticket"
-      // })
+      this.hasMany(models.ticket_airplane,{
+        foreignKey: "ticket_id",
+        as: "ticket"
+      })
     }
   }
   transaction.init({
