@@ -57,7 +57,7 @@ const postTiket = async (req, res) => {
         const datas = req.body
 
         const data = await tiket.create({
-            datas
+            ...datas
         })
 
         res.status(201).json({
@@ -77,8 +77,8 @@ const updateTiket = async (req, res) => {
         const datas = req.body
         const id = req.params.id
 
-        const dataId = await tiket.findOne({where:{id}})
-        
+        const dataId = await tiket.findOne({ where: { id } })
+
 
         // TODO: Validasi apakah id ada
         if (dataId === null) {
@@ -86,28 +86,22 @@ const updateTiket = async (req, res) => {
                 status: 'failed',
                 message: `Data dengan id ${id}, tidak ditemukan`
             })
-        }else{
+        } else {
             await tiket.update({
-                "transaction_id" : datas.transaction_id,
-                "passenger_id" : datas.passenger_id,
-                "price" : datas.prices,
-                "type_of_class" : datas.type_of_class,
-                "type_of_passenger" : datas.type_of_passengere,
-                "flight_id" : datas.flight_id,
-                "seat_id" : datas.seat_id
+                ...datas
             }, {
                 where: {
-                    id : id
+                    id: id
                 }
             })
             res.status(200).json({
                 status: 'success',
-                message: `Data dengan index ${datas} telah berhasil terupdate`,
-                data: dataId
+                message: `Data dengan index ${id} telah berhasil terupdate`,
+                data
             })
         }
 
-        
+
     } catch (err) {
         res.status(400).json({
             status: "failed",

@@ -87,9 +87,9 @@ const updateTransaksi = async (req, res) => {
         }
 
         await transaction.update({
-            "payment_id" : datas.payment_id,
-            "user_id" : datas.user_id,
-            "total_price" : datas.total_price 
+            "payment_id": datas.payment_id,
+            "user_id": datas.user_id,
+            "total_price": datas.total_price
         }, {
             where: {
                 id
@@ -113,12 +113,12 @@ const getIdTransaksi = async (req, res) => {
         const id = req.params.id
         const dataId = await transaction.findByPk(id)
 
-        if (!dataId){
+        if (!dataId) {
             return res.status(404).json({
                 status: 'failed',
                 message: `Data dengan id ${id}, tidak ditemukan`
             })
-        }else{
+        } else {
             return res.status(201).json({
                 status: 'success',
                 dataId

@@ -57,7 +57,7 @@ const postFlight = async (req, res) => {
         const datas = req.body
 
         const data = await flight.create({
-            datas
+            ...datas
         })
 
         res.status(201).json({
@@ -77,6 +77,8 @@ const updateFlight = async (req, res) => {
         const datas = req.body
         const id = req.params.id
 
+        console.log(datas);
+
         const dataId = await flight.findByPk(id)
 
         // TODO: Validasi apakah id ada
@@ -88,7 +90,7 @@ const updateFlight = async (req, res) => {
         }
 
         await flight.update({
-            datas
+            ...datas
         }, {
             where: {
                 id

@@ -57,7 +57,7 @@ const postNotification = async (req, res) => {
     const datas = req.body
 
     const data = await notification.create({
-      datas
+      ...datas
     })
 
     res.status(201).json({
@@ -88,7 +88,7 @@ const updateNotification = async (req, res) => {
     }
 
     await notification.update({
-      datas
+      ...datas
     }, {
       where: {
         id

@@ -56,7 +56,7 @@ const postSeat = async (req, res) => {
         const datas = req.body
 
         const data = await seat.create({
-            datas
+            ...datas
         })
 
         res.status(201).json({
@@ -87,7 +87,7 @@ const updateSeat = async (req, res) => {
         }
 
         await seat.update({
-            datas
+            ...datas
         }, {
             where: {
                 id

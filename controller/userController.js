@@ -169,11 +169,11 @@ const postUser = async (req, res) => {
 }
 
 const verifyForgetPassword = async (req, res) => {
-  try{
-    const {email,otp,password,confirm_password} = req.body
-    const users = await user.findOne({where:{email}})
-    if(users && users.otp === otp){
-      if(password === confirm_password){
+  try {
+    const { email, otp, password, confirm_password } = req.body
+    const users = await user.findOne({ where: { email } })
+    if (users && users.otp === otp) {
+      if (password === confirm_password) {
         await user.update({
           password: password
         }, {
@@ -185,19 +185,19 @@ const verifyForgetPassword = async (req, res) => {
           status: 'success',
           message: `Berhasil Mengganti Password`
         })
-      }else{
+      } else {
         res.status(400).json({
           status: "failed",
           message: "Password tidak sesuai"
         })
       }
-    }else{
+    } else {
       res.status(400).json({
         status: "failed",
         message: "Email dan otp tidak sesuai"
       })
     }
-  }catch(err){
+  } catch (err) {
     res.status(400).json({
       status: "failed",
       message: err.message
@@ -221,7 +221,6 @@ const updateUser = async (req, res) => {
   const schema = Joi.object({
     first_name: Joi.string().min(2).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).required().label("email"),
-    password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/, "password").required(),
     phone_number: Joi.string().pattern(/^(^\+62\s?|^0)(\d{10,14})$/, "No Telp").required().label("No Telp"),
     role: Joi.valid("admin", "user")
   })
@@ -230,8 +229,7 @@ const updateUser = async (req, res) => {
 
   if (!(val.error)) {
     try {
-      const { email, password, ...rest } = val.value
-      const hashPassword = bcrypt.hashSync(password, 10)
+      const { email, ...rest } = val.value
 
       const Email = await user.findOne({
         where: {
@@ -255,7 +253,6 @@ const updateUser = async (req, res) => {
 
       await user.update({
         email,
-        password: hashPassword,
         ...rest
       }, {
         where: {

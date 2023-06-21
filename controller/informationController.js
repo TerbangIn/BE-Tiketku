@@ -56,7 +56,7 @@ const postInformation = async (req, res) => {
     const datas = req.body
 
     const data = await information_flight.create({
-      datas
+      ...datas
     })
 
     res.status(201).json({
@@ -87,7 +87,7 @@ const updateInformation = async (req, res) => {
     }
 
     await information_flight.update({
-      datas
+      ...datas
     }, {
       where: {
         id

@@ -70,7 +70,7 @@ const postPassenger = async (req, res) => {
         const datas = val.value
 
         const data = await passenger.create({
-            datas
+            ...datas
         })
 
         try {
@@ -123,7 +123,7 @@ const updatePassenger = async (req, res) => {
         const datas = val.value
 
         await passenger.update({
-            datas
+            ...datas
         }, {
             where: {
                 id
