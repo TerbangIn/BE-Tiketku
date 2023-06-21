@@ -10,6 +10,7 @@ const Flight = require('./flight')
 const Seat = require("./seat")
 const Passenger = require("./passenger")
 const Tiket = require('./tiket')
+const Payment = require('./payment')
 const Notification = require('./notification')
 const swagger = require('swagger-ui-express')
 
@@ -24,10 +25,11 @@ router.use('/api/v1/flight', Flight)
 router.use('/api/v1/seat', Seat)
 router.use('/api/v1/passenger', Passenger)
 router.use('/api/v1/tiket', Tiket)
+router.use('/api/v1/payment', Payment)
 router.use('/api/v1/notification', Notification)
 router.use(notFound)
 router.use(error)
-router.use("/" ,(req,res) => {
+router.use("/", (req, res) => {
     res.send("API Running")
 })
 
