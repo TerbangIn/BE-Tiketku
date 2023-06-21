@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       ticket_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true
       },
       flight_id: {

@@ -5,20 +5,19 @@ module.exports = {
     await queryInterface.createTable('transactions', {
       id: {
         allowNull: false,
-        defaultValue: Sequelize.UUIDV4,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID
+        type: Sequelize.INTEGER
       },
-      ticket_id:{
+      kode_booking:{
         type: Sequelize.STRING,
-        allowNull: true,
       },
       payment_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       user_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       status: {

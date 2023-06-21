@@ -21,18 +21,18 @@ module.exports = (sequelize, DataTypes) => {
       //   as: "payment"
       // })
 
-      this.hasMany(models.ticket_airplane,{
-        foreignKey: "ticket_id",
-        as: "ticket"
+      this.hasMany(models.tiket,{
+        foreignKey: "transaction_id",
+        as: "tiket"
       })
     }
   }
   transaction.init({
-    ticket_id: DataTypes.STRING,
-    payment_id: DataTypes.STRING,
-    user_id: DataTypes.STRING,
+    payment_id: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER,
     status: DataTypes.STRING,
     total_price: DataTypes.DOUBLE,
+    kode_booking: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'transaction',

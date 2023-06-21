@@ -2,21 +2,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('tiket_airplanes', {
+    await queryInterface.createTable('tikets', {
       id: {
         allowNull: false,
-        defaultValue: Sequelize.UUIDV4,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID
+        type: Sequelize.INTEGER
       },
       seat_id: {
         type: Sequelize.INTEGER
       },
       flight_id: {
         type: Sequelize.INTEGER
-      },
-      max_kg: {
-        type: Sequelize.STRING
       },
       type_of_class: {
         type: Sequelize.ENUM(['Economy Class','Business Class','First Class','Premium Class'])
@@ -31,7 +28,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       transaction_id:{
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('tiket_airplanes');
+    await queryInterface.dropTable('tikets');
   }
 };

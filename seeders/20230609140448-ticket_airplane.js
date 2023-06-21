@@ -14,12 +14,10 @@ module.exports = {
     */
     let typeClass = ['Economy Class','Business Class','First Class','Premium Class']
     let typePassenger = ["Adult","Child","Baby"]
-    await queryInterface.bulkInsert('tiket_airplanes', [
+    await queryInterface.bulkInsert('tikets', [
       {
-        id: uuidv4(),
         seat_id: 1,
         flight_id : 1,
-        max_kg : Math.floor(Math.random() * 20),
         type_of_class: typeClass[Math.floor(Math.random() * typeClass.length)],
         type_of_passenger: typePassenger[Math.floor(Math.random() * typePassenger.length)],
         price : Math.floor(1000000000 + Math.random() * 9000000000),
@@ -38,6 +36,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('tiket_airplanes', null, {});
+    await queryInterface.bulkDelete('tikets', null, {});
   }
 };

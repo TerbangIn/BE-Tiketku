@@ -5,9 +5,9 @@ const createTransaksi = async (req, res) => {
     try {
         const request = req.body.user_id
         const data = await transaction.create({
-            id: uuidv4(),
             status: "Unpaid",
             user_id: request,
+            kode_booking: Math.random().toString(36).toUpperCase().slice(2, 14),
         })
 
         res.status(201).json({
@@ -58,7 +58,7 @@ const deleteTransaksi = async (req, res) => {
 const getTransaksi = async (req, res) => {
     try {
         let data = await transaction.findAll({
-            include: ["ticket"]
+            include: ["tiket"]
         })
         return res.status(200).json({
             status: 'success',
@@ -87,7 +87,9 @@ const updateTransaksi = async (req, res) => {
         }
 
         await transaction.update({
-            datas
+            "payment_id" : datas.payment_id,
+            "user_id" : datas.user_id,
+            "total_price" : datas.total_price 
         }, {
             where: {
                 id
@@ -95,7 +97,7 @@ const updateTransaksi = async (req, res) => {
         })
         res.status(200).json({
             status: 'success',
-            message: `Data dengan index ${id} telah berhasil terupdate`
+            message: `Data dengan index ${dataId} telah berhasil terupdate`
         })
     } catch (err) {
         res.status(400).json({
