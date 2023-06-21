@@ -3,7 +3,7 @@ const { tiket } = require('../models')
 const getTiket = async (req, res) => {
     data = await tiket.findAll({
         order: [["id", "Asc"]],
-        include: ["seat", "flight", "passenger"]
+        include: { all: true, nested: true }
     })
 
     try {
@@ -30,7 +30,9 @@ const getTiket = async (req, res) => {
 const getIdTiket = async (req, res) => {
     try {
         const id = req.params.id
-        const data = await tiket.findByPk(id)
+        const data = await tiket.findByPk(id,{
+            include: { all: true, nested: true }
+        })
 
         // TODO: Validasi apakah id ada
         if (data === null) {

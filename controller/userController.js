@@ -26,7 +26,9 @@ const transporter = nodemailer.createTransport({
   }
 })
 const getUsers = async (req, res) => {
-  const data = await user.findAll()
+  const data = await user.findAll({
+    include: { all: true, nested: true }
+  })
 
   try {
     if (data.length) {
@@ -53,7 +55,9 @@ const getIdUser = async (req, res) => {
   try {
     // const { name, price, stock } = req.body
     const id = req.params.id
-    const data = await user.findByPk(id)
+    const data = await user.findByPk(id,{
+      include: { all: true, nested: true }
+    })
 
     // TODO: Validasi apakah id ada
     if (data !== null) {

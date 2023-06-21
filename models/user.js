@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.notification,{
+        foreignKey: "user_id",
+        as: "notification"
+      })
+
+      this.hasMany(models.transaction,{
+        foreignKey: "user_id",
+        as: "transaction"
+      })
     }
   }
   user.init({

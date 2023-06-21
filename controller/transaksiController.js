@@ -58,7 +58,7 @@ const deleteTransaksi = async (req, res) => {
 const getTransaksi = async (req, res) => {
     try {
         let data = await transaction.findAll({
-            include: ["tiket"]
+            include: { all: true, nested: true }
         })
         return res.status(200).json({
             status: 'success',
@@ -111,7 +111,9 @@ const updateTransaksi = async (req, res) => {
 const getIdTransaksi = async (req, res) => {
     try {
         const id = req.params.id
-        const dataId = await transaction.findByPk(id)
+        const dataId = await transaction.findByPk(id, {
+            include: { all: true, nested: true }
+        })
 
         if (!dataId) {
             return res.status(404).json({
