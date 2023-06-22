@@ -55,7 +55,7 @@ const getIdUser = async (req, res) => {
   try {
     // const { name, price, stock } = req.body
     const id = req.params.id
-    const data = await user.findByPk(id,{
+    const data = await user.findByPk(id, {
       include: { all: true, nested: true }
     })
 
@@ -176,10 +176,12 @@ const verifyForgetPassword = async (req, res) => {
   try {
     const { email, otp, password, confirm_password } = req.body
     const users = await user.findOne({ where: { email } })
+    const hashPassword = bcrypt.hashSync(password, 10)
+
     if (users && users.otp === otp) {
       if (password === confirm_password) {
         await user.update({
-          password: password
+          password: hashPassword
         }, {
           where: {
             email
@@ -190,7 +192,7 @@ const verifyForgetPassword = async (req, res) => {
           message: `Berhasil Mengganti Password`
         })
       } else {
-        res.status(400).json({
+        res.status(409).json({
           status: "failed",
           message: "Password tidak sesuai"
         })

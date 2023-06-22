@@ -49,7 +49,7 @@
       "description": "Operations about passengers"
     },
     {
-      "name": "Tiket Airplane",
+      "name": "Tiket",
       "description": "Operations about tiket airplanes"
     },
     {
@@ -439,6 +439,118 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/forget-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get password",
+        "description": "Get new password.",
+        "operationId": "getNewPassword",
+        "requestBody": {
+          "description": "Created password object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgetPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success get new password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berhasil Mengganti password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email saya@gmail.com tidak ada"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password tidak sesuai"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email dan otp tidak sesuai"
+                    }
+                  }
                 }
               }
             }
@@ -2699,6 +2811,996 @@
         ]
       }
     },
+    "/tiket/{id}": {
+      "get": {
+        "tags": [
+          "Tiket"
+        ],
+        "summary": "Get tiket",
+        "description": "Get tiket by id.",
+        "operationId": "getTiketById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of tiket to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get tikets by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tikets"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Tiket"
+        ],
+        "summary": "Update tiket",
+        "description": "Update tiket data.",
+        "operationId": "updateTiket",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of tiket to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated tiket object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tiket"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Tiket"
+        ],
+        "summary": "Delete tiket",
+        "description": "Delete tiket by id.",
+        "operationId": "deleteTiketById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of tiket to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete tiket",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/transaksi/": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Get transactions",
+        "description": "Get all transactions.",
+        "operationId": "getAllTransaction",
+        "responses": {
+          "200": {
+            "description": "Success get all transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Transactions"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Create data transaction",
+        "description": "Can create transaction data.",
+        "operationId": "createTransaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success create data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data tiket berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Tikets"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/transaksi/{id}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Get transaction",
+        "description": "Get transaction by id.",
+        "operationId": "getTransactionById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of transaction to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get transactions by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transactions"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Update transaction",
+        "description": "Update transaction data.",
+        "operationId": "updateTransaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of transaction to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated transaction object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Delete transaction",
+        "description": "Delete transaction by id.",
+        "operationId": "deleteTransactionById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of transaction to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/payment/": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "Get payments",
+        "description": "Get all payments.",
+        "operationId": "getAllPayment",
+        "responses": {
+          "200": {
+            "description": "Success get all payments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Payments"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "Create data payment",
+        "description": "Can create payment data.",
+        "operationId": "createPayment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success create data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data tiket berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/Tikets"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/payment/{id}": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "Get payment",
+        "description": "Get payment by id.",
+        "operationId": "getPaymentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of payment to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get payments by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payments"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "Update payment",
+        "description": "Update payment data.",
+        "operationId": "updatePayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of payment to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated payment object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 2 telah berhasil terupdate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "Delete payment",
+        "description": "Delete payment by id.",
+        "operationId": "deletePaymentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of payment to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete payment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data dengan index 3 telah berhasil terhapus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/notification/": {
       "get": {
         "tags": [
@@ -3175,8 +4277,47 @@
           "updatedAt": {
             "type": "string",
             "example": "2023-05-04T14:20:27.537Z"
+          },
+          "notification": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notifications"
+            }
+          },
+          "payment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transactions"
+            }
           }
         }
+      },
+      "ForgetPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@gmail.com"
+          },
+          "otp": {
+            "type": "string",
+            "example": "hjh2998"
+          },
+          "password": {
+            "type": "string",
+            "example": "Admin11#"
+          },
+          "confirm_password": {
+            "type": "string",
+            "example": "Admin11#"
+          }
+        },
+        "required": [
+          "email",
+          "otp",
+          "password",
+          "confirm_password"
+        ]
       },
       "Flight": {
         "type": "object",
@@ -3335,6 +4476,18 @@
           "updatedAt": {
             "type": "string",
             "example": "2023-05-04T14:20:27.537Z"
+          },
+          "information": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Informations"
+            }
+          },
+          "seat": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Seats"
+            }
           },
           "source": {
             "$ref": "#/components/schemas/Airports"
@@ -3717,6 +4870,174 @@
           "updatedAt": {
             "type": "string",
             "example": "2023-05-04T14:20:27.537Z"
+          },
+          "seat": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Seats"
+            }
+          },
+          "flight": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Flights"
+            }
+          },
+          "passengers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Passengers"
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transactions"
+            }
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "example": "Unpaid",
+            "enum": [
+              "Unpaid",
+              "Issued",
+              "Cancelled"
+            ]
+          },
+          "total_price": {
+            "type": "integer",
+            "example": 100000
+          }
+        },
+        "required": [
+          "total_price",
+          "payment_id",
+          "user_id"
+        ]
+      },
+      "Transactions": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "payment_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "example": "Unpaid",
+            "enum": [
+              "Unpaid",
+              "Issued",
+              "Cancelled"
+            ]
+          },
+          "total_price": {
+            "type": "integer",
+            "example": 100000
+          },
+          "kode_booking": {
+            "type": "string",
+            "example": "T1XFR7O8EIQ"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "user": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Users"
+            }
+          },
+          "payment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Payments"
+            }
+          },
+          "tiket": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tiket"
+            }
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "type_of_payment": {
+            "type": "string",
+            "example": "GOPAY"
+          },
+          "image_brand": {
+            "type": "string",
+            "example": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/2560px-Gopay_logo.svg.png"
+          },
+          "price": {
+            "type": "integer",
+            "example": 20000
+          }
+        },
+        "required": [
+          "type_of_payment",
+          "image_brand",
+          "price"
+        ]
+      },
+      "Payments": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "type_of_payment": {
+            "type": "string",
+            "example": "GOPAY"
+          },
+          "image_brand": {
+            "type": "string",
+            "example": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/2560px-Gopay_logo.svg.png"
+          },
+          "price": {
+            "type": "integer",
+            "example": 20000
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-05-04T14:20:27.537Z"
           }
         }
       },
@@ -3733,11 +5054,11 @@
           },
           "title": {
             "type": "string",
-            "example": "Transaksimu belum dibayar"
+            "example": "Paymentmu belum dibayar"
           },
           "desc": {
             "type": "string",
-            "example": "Segera lakukan pembayaran pada transaksi anda."
+            "example": "Segera lakukan pembayaran pada payment anda."
           },
           "user_id": {
             "type": "integer",
@@ -3769,7 +5090,7 @@
           },
           "title": {
             "type": "string",
-            "example": "Transaksimu belum dibayar"
+            "example": "Paymentmu belum dibayar"
           },
           "desc": {
             "type": "string",

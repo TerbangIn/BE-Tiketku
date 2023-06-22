@@ -4,7 +4,7 @@ const { randFlightDetails } = require('@ngneat/falso');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -14,15 +14,15 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    const dummy = randFlightDetails({length: 5});
+    const dummy = randFlightDetails({ length: 5 });
     Promise.all(
       dummy.map(async (data) => {
         await queryInterface.bulkInsert('flights', [{
           image: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/AdamAir_logo.png',
           flight_number: data.flightNumber,
           airline: data.airline,
-          source_airport: 1,
-          destination_airport: 2,
+          source_airport: Math.floor(Math.random() * 10) + 1,
+          destination_airport: Math.floor(Math.random() * 10) + 1,
           departure_date: new Date(),
           arrival_date: new Date(),
           capacity: Math.floor(Math.random() * 100),
@@ -37,7 +37,7 @@ module.exports = {
     )
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *

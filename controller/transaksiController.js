@@ -3,10 +3,10 @@ const { v4: uuidv4 } = require('uuid');
 
 const createTransaksi = async (req, res) => {
     try {
-        const request = req.body.user_id
+        const datas = req.body
         const data = await transaction.create({
             status: "Unpaid",
-            user_id: request,
+            ...datas,
             kode_booking: Math.random().toString(36).toUpperCase().slice(2, 14),
         })
 
@@ -87,9 +87,7 @@ const updateTransaksi = async (req, res) => {
         }
 
         await transaction.update({
-            "payment_id": datas.payment_id,
-            "user_id": datas.user_id,
-            "total_price": datas.total_price
+            ...datas
         }, {
             where: {
                 id
