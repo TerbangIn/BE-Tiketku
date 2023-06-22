@@ -176,10 +176,10 @@ const verifyForgetPassword = async (req, res) => {
   try {
     const { email, otp, password, confirm_password } = req.body
     const users = await user.findOne({ where: { email } })
-    const hashPassword = bcrypt.hashSync(password, 10)
 
     if (users && users.otp === otp) {
       if (password === confirm_password) {
+        const hashPassword = bcrypt.hashSync(password, 10)
         await user.update({
           password: hashPassword
         }, {
