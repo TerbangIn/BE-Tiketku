@@ -20,7 +20,7 @@ const getFlight = async (req, res) => {
         }
 
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             status: "success",
             message: error.message
         })
