@@ -27,6 +27,18 @@ module.exports = {
       total_price: {
         type: Sequelize.DOUBLE
       },
+      payment_status:{
+        type: Sequelize.STRING,
+        defaultValue: 'waiting'
+      },
+      midtrans_url:{
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      midtrans_booking_code:{
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
