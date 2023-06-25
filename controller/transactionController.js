@@ -10,11 +10,11 @@ let snap = new midtransClient.Snap({
     clientKey: process.env.CLIENTKEY
 })
 
-const getSnapRedirect = async (req,res) => {
-    try{
+const getSnapRedirect = async (req, res) => {
+    try {
         const id = req.params.id
 
-        const dataId = await transaction.findByPk(id,{
+        const dataId = await transaction.findByPk(id, {
             include: { all: true, nested: true }
         })
 
@@ -26,19 +26,19 @@ const getSnapRedirect = async (req,res) => {
             })
         }
 
-        let midtrans_booking = dataId.id+'-'+(Math.random() + 1).toString(36).substring(7)
+        let midtrans_booking = dataId.id + '-' + (Math.random() + 1).toString(36).substring(7)
         let orderId = midtrans_booking
 
         let transaction_details = {
-            "order_id" : orderId,
-            "gross_amount" : dataId.total_price
+            "order_id": orderId,
+            "gross_amount": dataId.total_price
         }
 
         let item_details = [{
-            "id" : orderId,
+            "id": orderId,
             "price": dataId.total_price,
             "quantity": dataId.tiket.length,
-            "name": "Payment for "+ dataId.tiket[0].flight.airline + " - " + dataId.tiket.length+ " tiket"
+            "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
         }]
 
         let customer_details = {
@@ -48,32 +48,32 @@ const getSnapRedirect = async (req,res) => {
         }
 
         let midtrans_params = {
-            "transaction_details" : transaction_details,
-            "customer_details" : customer_details,
-            "item_details" : item_details,
-            "enabled_payments" : ['gopay','shopeepay']
+            "transaction_details": transaction_details,
+            "customer_details": customer_details,
+            "item_details": item_details,
+            "enabled_payments": ['gopay', 'shopeepay']
         }
 
-         
-        await snap.createTransaction(midtrans_params)
-        .then(async (transaction_response)=>{
-            // transaction redirect_url
-            let redirectUrl = transaction_response.redirect_url;
-            await transaction.update({
-                midtrans_url: redirectUrl,
-                midtrans_booking_code: midtrans_booking,
-            }, {
-                where: {
-                    id
-                }
-            })
-            res.status(201).json({
-                status: `Transaksi Telah Dibuat Silahkan Anda Melakukan Pembayaraan`,
-                link : redirectUrl
-              })
-        })
 
-    }catch (err) {
+        await snap.postTransaction(midtrans_params)
+            .then(async (transaction_response) => {
+                // transaction redirect_url
+                let redirectUrl = transaction_response.redirect_url;
+                await transaction.update({
+                    midtrans_url: redirectUrl,
+                    midtrans_booking_code: midtrans_booking,
+                }, {
+                    where: {
+                        id
+                    }
+                })
+                res.status(201).json({
+                    status: `Transaction Telah Dibuat Silahkan Anda Melakukan Pembayaraan`,
+                    link: redirectUrl
+                })
+            })
+
+    } catch (err) {
         res.status(400).json({
             status: "failed",
             message: err.message
@@ -81,90 +81,92 @@ const getSnapRedirect = async (req,res) => {
     }
 }
 
-const midtransCallback = async (req,res) => {
-    try{
+const midtransCallback = async (req, res) => {
+    try {
         await apiClient.transaction.notification(notificationJson)
-        .then(async (statusResponse)=>{
-            let orderId = statusResponse.order_id;
-            let transactionStatus = statusResponse.transaction_status;
-            let fraudStatus = statusResponse.fraud_status;
-            const id = orderId.split("-");
+            .then(async (statusResponse) => {
+                let orderId = statusResponse.order_id;
+                let transactionStatus = statusResponse.transaction_status;
+                let fraudStatus = statusResponse.fraud_status;
+                const id = orderId.split("-");
 
-            // console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
-            const dataId = await transaction.findOne({where:{
-                id: id[0]
-            }},{
-                include: { all: true, nested: true }
-            })
-    
-            let status = ''
-    
-            if (transactionStatus == 'capture'){
-                if (fraudStatus == 'challenge'){
-                    // TODO set transaction status on your databaase to 'challenge'
-                    status = 'pending'
-                    await transaction.update({
-                        payment_status: status,
-                    }, {
-                        where: {
-                            id:id[0]
-                        }
-                    })
+                // console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
+                const dataId = await transaction.findOne({
+                    where: {
+                        id: id[0]
+                    }
+                }, {
+                    include: { all: true, nested: true }
+                })
 
-                    return res.status(201).json({
-                        status: 'success',
-                        dataId
-                    })
-                }
-                } else if (fraudStatus == 'accept'){
+                let status = ''
+
+                if (transactionStatus == 'capture') {
+                    if (fraudStatus == 'challenge') {
+                        // TODO set transaction status on your databaase to 'challenge'
+                        status = 'pending'
+                        await transaction.update({
+                            payment_status: status,
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                        })
+                    }
+                } else if (fraudStatus == 'accept') {
                     // TODO set transaction status on your databaase to 'success'
                     status = 'paid'
                     await transaction.update({
                         payment_status: status,
                     }, {
                         where: {
-                            id:id[0]
+                            id: id[0]
                         }
                     })
                     return res.status(201).json({
                         status: 'success',
                         dataId
                     })
-                
-            } else if (transactionStatus == 'cancel' ||
-            transactionStatus == 'deny' ||
-            transactionStatus == 'expire'){
-            // TODO set transaction status on your databaase to 'failure'
-                status = 'failed'
-                await transaction.update({
-                    payment_status: status,
-                }, {
-                    where: {
-                        id:id[0]
-                    }
-                })
-                return res.status(201).json({
-                    status: 'success',
-                    dataId
-                })
-            } else if (transactionStatus == 'pending'){
-            // TODO set transaction status on your databaase to 'pending' / waiting payment
-                status = 'pending'
-                await transaction.update({
-                    payment_status: status,
-                }, {
-                    where: {
-                        id:id[0]
-                    }
-                })
-                return res.status(201).json({
-                    status: 'success',
-                    dataId
-                })
-            }
 
-        })
-    }catch (error) {
+                } else if (transactionStatus == 'cancel' ||
+                    transactionStatus == 'deny' ||
+                    transactionStatus == 'expire') {
+                    // TODO set transaction status on your databaase to 'failure'
+                    status = 'failed'
+                    await transaction.update({
+                        payment_status: status,
+                    }, {
+                        where: {
+                            id: id[0]
+                        }
+                    })
+                    return res.status(201).json({
+                        status: 'success',
+                        dataId
+                    })
+                } else if (transactionStatus == 'pending') {
+                    // TODO set transaction status on your databaase to 'pending' / waiting payment
+                    status = 'pending'
+                    await transaction.update({
+                        payment_status: status,
+                    }, {
+                        where: {
+                            id: id[0]
+                        }
+                    })
+                    return res.status(201).json({
+                        status: 'success',
+                        dataId
+                    })
+                }
+
+            })
+    } catch (error) {
         res.status(400).json({
             status: "failed",
             message: error.message
@@ -172,7 +174,7 @@ const midtransCallback = async (req,res) => {
     }
 }
 
-const createTransaksi = async (req, res) => {
+const postTransaction = async (req, res) => {
     try {
         const datas = req.body
         const data = await transaction.create({
@@ -182,7 +184,7 @@ const createTransaksi = async (req, res) => {
         })
 
         res.status(201).json({
-            status: 'Transaksi Berhasil dibuat',
+            status: 'Transaction Berhasil dibuat',
             data
         })
     } catch (error) {
@@ -193,7 +195,7 @@ const createTransaksi = async (req, res) => {
     }
 }
 
-const deleteTransaksi = async (req, res) => {
+const deleteTransaction = async (req, res) => {
     try {
         const id = req.params.id
 
@@ -226,7 +228,7 @@ const deleteTransaksi = async (req, res) => {
 }
 
 
-const getTransaksi = async (req, res) => {
+const getTransaction = async (req, res) => {
     try {
         let data = await transaction.findAll({
             include: { all: true, nested: true }
@@ -243,7 +245,7 @@ const getTransaksi = async (req, res) => {
     }
 }
 
-const updateTransaksi = async (req, res) => {
+const updateTransaction = async (req, res) => {
     try {
         const datas = req.body
         const id = req.params.id
@@ -277,7 +279,7 @@ const updateTransaksi = async (req, res) => {
 }
 
 
-const getIdTransaksi = async (req, res) => {
+const getIdTransaction = async (req, res) => {
     try {
         const id = req.params.id
         const dataId = await transaction.findByPk(id, {
@@ -305,11 +307,11 @@ const getIdTransaksi = async (req, res) => {
 }
 
 module.exports = {
-    createTransaksi,
-    getTransaksi,
-    getIdTransaksi,
-    deleteTransaksi,
-    updateTransaksi,
+    postTransaction,
+    getTransaction,
+    getIdTransaction,
+    deleteTransaction,
+    updateTransaction,
     getSnapRedirect,
     midtransCallback
 }

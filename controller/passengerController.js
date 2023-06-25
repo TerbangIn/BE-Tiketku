@@ -55,13 +55,13 @@ const getIdPassenger = async (req, res) => {
 const postPassenger = async (req, res) => {
     const schema = Joi.object({
         title: Joi.valid("Tn.", "Mr.", "Mrs."),
-        first_name: Joi.string().required(),
-        last_name: Joi.optional(),
-        date_of_birth: Joi.date().required(),
+        first_name: Joi.string().required().label("Full Name"),
+        last_name: Joi.optional().label("Surname"),
+        date_of_birth: Joi.date().required().label("Date Of Birth"),
         country: Joi.string().required(),
-        identity_number: Joi.string().min(8).required(),
-        identity_number_of_country: Joi.string().required(),
-        expired_date: Joi.date().greater('now').required()
+        identity_number: Joi.string().min(8).required().label("Identity number"),
+        identity_number_of_country: Joi.string().required().label("The country of the ID number"),
+        expired_date: Joi.date().greater('now').required().label("The expiration date of the identity number")
     })
 
     const val = schema.validate(req.body)
@@ -108,13 +108,13 @@ const updatePassenger = async (req, res) => {
 
     const schema = Joi.object({
         title: Joi.valid("Tn.", "Mr.", "Mrs."),
-        first_name: Joi.string().required(),
-        last_name: Joi.optional(),
-        date_of_birth: Joi.date().required(),
+        first_name: Joi.string().required().label("Full Name"),
+        last_name: Joi.optional().label("Surname"),
+        date_of_birth: Joi.date().required().label("Date Of Birth"),
         country: Joi.string().required(),
-        identity_number: Joi.string().min(8).required(),
-        identity_number_of_country: Joi.string().required(),
-        expired_date: Joi.date().greater('now').required()
+        identity_number: Joi.string().min(8).required().label("Identity number"),
+        identity_number_of_country: Joi.string().required().label("The country of the ID number"),
+        expired_date: Joi.date().greater('now').required().label("The expiration date of the identity number")
     })
 
     const val = schema.validate(req.body)

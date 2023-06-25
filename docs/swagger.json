@@ -4811,6 +4811,10 @@
           }
         },
         "required": [
+          "seat_id",
+          "flight_id",
+          "passenger_id",
+          "transaction_id",
           "type_of_class",
           "type_of_passenger",
           "price"

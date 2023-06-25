@@ -81,7 +81,7 @@ const getIdUser = async (req, res) => {
 
 const postUser = async (req, res) => {
   const schema = Joi.object({
-    first_name: Joi.string().min(2).required(),
+    first_name: Joi.string().min(2).required().label("Full Name"),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).required().label("email"),
     password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/, "password").required(),
     phone_number: Joi.string().pattern(/^(^\+62\s?|^0)(\d{10,14})$/, "No Telp").required().label("No Telp"),
@@ -225,7 +225,7 @@ const updateUser = async (req, res) => {
   }
 
   const schema = Joi.object({
-    first_name: Joi.string().min(2).required(),
+    first_name: Joi.string().min(2).required().label("Full Name"),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com'] } }).required().label("email"),
     phone_number: Joi.string().pattern(/^(^\+62\s?|^0)(\d{10,14})$/, "No Telp").required().label("No Telp"),
     role: Joi.valid("admin", "user")
