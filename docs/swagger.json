@@ -4940,7 +4940,6 @@
         },
         "required": [
           "total_price",
-          "payment_id",
           "user_id"
         ]
       },

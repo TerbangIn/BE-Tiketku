@@ -1,3 +1,4 @@
+const Joi = require('joi')
 const { tiket } = require('../models')
 
 const getTiket = async (req, res) => {
@@ -30,7 +31,7 @@ const getTiket = async (req, res) => {
 const getIdTiket = async (req, res) => {
     try {
         const id = req.params.id
-        const data = await tiket.findByPk(id,{
+        const data = await tiket.findByPk(id, {
             include: { all: true, nested: true }
         })
 
@@ -55,21 +56,41 @@ const getIdTiket = async (req, res) => {
 }
 
 const postTiket = async (req, res) => {
-    try {
-        const datas = req.body
+    const schema = Joi.object({
+        seat_id: Joi.number().integer().required().label("ID seat"),
+        flight_id: Joi.number().integer().required().label("ID Flight"),
+        passenger_id: Joi.number().integer().required().label("ID Passenger"),
+        transaction_id: Joi.number().integer().required().label("ID Transaction"),
+        type_of_class: Joi.valid("Economy Class", "Business Class", "First Class", "Premium Class").required().label("Type Class Flight"),
+        type_of_passenger: Joi.valid("Adult", "Child", "Baby").required().label("Type Passenger"),
+        price: Joi.number().required()
+    })
 
-        const data = await tiket.create({
-            ...datas
-        })
+    const val = schema.validate(req.body)
 
-        res.status(201).json({
-            status: 'success',
-            data
-        })
-    } catch (error) {
+    if (!(val.error)) {
+        try {
+            const datas = val.value
+
+            const data = await tiket.create({
+                ...datas
+            })
+
+            res.status(201).json({
+                status: 'success',
+                data
+            })
+        } catch (error) {
+            res.status(400).json({
+                status: "failed",
+                message: error.message
+            })
+        }
+    } else {
+        const message = val.error.details[0].message
         res.status(400).json({
             status: "failed",
-            message: error.message
+            message
         })
     }
 }

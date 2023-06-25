@@ -2,7 +2,8 @@ require('dotenv').config()
 
 const { transaction } = require('../models')
 const { v4: uuidv4 } = require('uuid');
-const midtransClient = require('midtrans-client')
+const midtransClient = require('midtrans-client');
+const Joi = require('joi');
 
 let snap = new midtransClient.Snap({
     isProduction: false,
@@ -175,22 +176,41 @@ const midtransCallback = async (req, res) => {
 }
 
 const postTransaction = async (req, res) => {
-    try {
-        const datas = req.body
-        const data = await transaction.create({
-            status: "Unpaid",
-            ...datas,
-            kode_booking: Math.random().toString(36).toUpperCase().slice(2, 14),
-        })
+    const schema = Joi.object({
+        user_id: Joi.number().integer().required().label("ID user"),
+        payment_id: Joi.number().integer().label("ID payment"),
+        payment_status: Joi.string().label("Status Payment"),
+        total_price: Joi.number().required().label("Total Price"),
+        midtrans_url: Joi.string(),
+        midtrans_booking_code: Joi.string()
+    })
 
-        res.status(201).json({
-            status: 'Transaction Berhasil dibuat',
-            data
-        })
-    } catch (error) {
+    const val = schema.validate(req.body)
+
+    if (!(val.error)) {
+        try {
+            const datas = val.value
+            const data = await transaction.create({
+                status: "Unpaid",
+                ...datas,
+                kode_booking: Math.random().toString(36).toUpperCase().slice(2, 14),
+            })
+
+            res.status(201).json({
+                status: 'Success',
+                data
+            })
+        } catch (error) {
+            res.status(400).json({
+                status: "failed",
+                message: error.message
+            })
+        }
+    } else {
+        const message = val.error.details[0].message
         res.status(400).json({
             status: "failed",
-            message: error.message
+            message
         })
     }
 }
