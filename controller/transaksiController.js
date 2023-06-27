@@ -83,7 +83,7 @@ const getSnapRedirect = async (req,res) => {
 
 const midtransCallback = async (req,res) => {
     try{
-        await apiClient.transaction.notification(notificationJson)
+        await snap.transaction.notification(notificationJson)
         .then(async (statusResponse)=>{
             let orderId = statusResponse.order_id;
             let transactionStatus = statusResponse.transaction_status;

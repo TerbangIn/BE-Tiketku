@@ -1,5 +1,5 @@
 const { flight } = require('../models')
-
+const axios = require('axios')
 const getFlight = async (req, res) => {
     data = await flight.findAll({
         order: [["id", "Asc"]],
@@ -20,6 +20,21 @@ const getFlight = async (req, res) => {
         }
 
     } catch (error) {
+        return res.status(400).json({
+            status: "success",
+            message: error.message
+        })
+    }
+}
+
+const filterTermurah = async (req,res) => {
+    try{
+        await axios.get()
+        data = req.body.data
+        
+        data.filter
+
+    }catch{
         return res.status(400).json({
             status: "success",
             message: error.message

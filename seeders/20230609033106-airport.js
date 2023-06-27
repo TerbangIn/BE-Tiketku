@@ -14,33 +14,176 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    
-    const { v4: uuidv4 } = require('uuid');
-    let dummy = randAirport({length: 10})
-    // let dummy1 = randAirport({length: 1})
-    // await queryInterface.bulkInsert('airports', [{
-    //   id: uuidv4(),
-    //   name: dummy1[0].name,
-    //   code: dummy1[0].code,
-    //   city: dummy1[0].city,
-    //   country: dummy1[0].country,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date()
-    // }],);
-    
-    await Promise.all(
-      dummy.map(async (data) => {
-        await queryInterface.bulkInsert('airports', [{
-         name: data.name,
-         code: data.code,
-         city: data.city,
-         country: data.country,
+ 
+ 
+    await queryInterface.bulkInsert('airports', [{
+         name: "Bandar Udara Internasional Soekarno–Hatta",
+         code: "CGK",
+         city: "Banten",
+         country: "Indonesia",
+         continent: "Asia",
          createdAt: new Date(),
          updatedAt: new Date()
-       }],);
-     })
-    )
+       },
+       {
+        name: "Bandar Udara Internasional Ngurah Rai",
+        code: "DPS",
+        city: "Denpasar",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bandar Udara Internasional Juanda",
+        code: "SUB",
+        city: "Surabaya",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bandar Udara Internasional Sultan Hasanuddin",
+        code: "UPG",
+        city: "Makassar",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bandar Udara Internasional Kualanamu",
+        code: "KNO",
+        city: "Medan",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bandar Udara Halim Perdanakusuma",
+        code: "HLP",
+        city: "Jakarta",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Seoul Incheon International",
+        code: "ICN",
+        city: "Seoul",
+        country: "South Korea",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Hong Kong International Airport",
+        code: "HKG",
+        city: "Hong Kong",
+        country: "China",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bandar Udara Changi Singapura",
+        code: "SIN",
+        city: "Singapore",
+        country: "Singapore",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Munich International Airport",
+        code: "MUC",
+        city: "Munich",
+        country: "Germany",
+        continent: "Europe",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      
+      {
+        name: "Madrid Barajas Airport",
+        code: "MAD",
+        city: "Madrid",
+        country: "Spain",
+        continent: "Europe",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Amsterdam Airport",
+        code: "AMS",
+        city: "Amsterdam",
+        country: "Netherlands",
+        continent: "Europe",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Cape Town Airport",
+        code: "CPT",
+        city: "Cape Town",
+        country: "South Africa",
+        continent: "Africa",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+
+      {
+        name: "Kairo Internasional Airport",
+        code: "CAI",
+        city: "Kairo",
+        country: "Mesir",
+        continent: "Africa",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Hartsfield–Jackson Atlanta International Airport",
+        code: "ATL",
+        city: "Atlanta",
+        country: "USA",
+        continent: "America",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Los Angeles International Airport",
+        code: "LAX",
+        city: "Los Angeles",
+        country: "USA",
+        continent: "America",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "John F. Kennedy International Airport",
+        code: "JFK",
+        city: "New York",
+        country: "USA",
+        continent: "America",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Miami International Airport",
+        code: "MIA",
+        city: "Miami",
+        country: "USA",
+        continent: "America",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+    ],);
   },
+     
+    
 
   async down (queryInterface, Sequelize) {
     /**

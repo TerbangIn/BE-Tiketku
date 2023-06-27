@@ -21,6 +21,9 @@ module.exports = {
       country:{
         type: Sequelize.STRING
       },
+      continent:{
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
