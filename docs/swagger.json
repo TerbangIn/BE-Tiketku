@@ -4811,6 +4811,10 @@
           }
         },
         "required": [
+          "seat_id",
+          "flight_id",
+          "passenger_id",
+          "transaction_id",
           "type_of_class",
           "type_of_passenger",
           "price"
@@ -4920,11 +4924,22 @@
           "total_price": {
             "type": "integer",
             "example": 100000
+          },
+          "payment_status": {
+            "type": "string",
+            "example": "waiting"
+          },
+          "midtrans_url": {
+            "type": "string",
+            "example": "https://app.sandbox.midtrans.com/snap/v3/redirection/cc238e04-d960-45f3-aa01-9cb66ece8af8#/409"
+          },
+          "midtrans_booking_code": {
+            "type": "string",
+            "example": "CE-21992"
           }
         },
         "required": [
           "total_price",
-          "payment_id",
           "user_id"
         ]
       },
@@ -4943,6 +4958,18 @@
           "user_id": {
             "type": "integer",
             "example": 1
+          },
+          "payment_status": {
+            "type": "string",
+            "example": "waiting"
+          },
+          "midtrans_url": {
+            "type": "string",
+            "example": "https://app.sandbox.midtrans.com/snap/v3/redirection/cc238e04-d960-45f3-aa01-9cb66ece8af8#/409"
+          },
+          "midtrans_booking_code": {
+            "type": "string",
+            "example": "CE-21992"
           },
           "status": {
             "type": "string",

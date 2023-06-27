@@ -1,5 +1,7 @@
-# Final Project
-This is a project for Final Project in Binar Academy.  
+# Final Project: TerbangIN
+This is the REST API backend from the final project at Binar Academy. REST API for booking flight tickets. 
+
+[API Documentation](https://be-tiketku-production.up.railway.app/api-docs)
 
 ## Authors  
 - [Brahmasta Bagus Aryandra](https://github.com/Brahmastabagus)
@@ -28,8 +30,6 @@ Install dependencies
 npm install
 ~~~
 
-Setup env
-
 Setup Sequelize
 
 ~~~bash  
@@ -44,7 +44,20 @@ Start the server
 npm run dev
 ~~~
 
-[API Documentation](http://localhost:{PORT}/api-docs)
+## Environment Variables  
+To run this project, you will need to add the following environment variables to your .env file  
+`JWT_SIGNATURE_KEY`
+`DB_USERNAME`
+`DB_PASSWORD`
+`DB_NAME`
+`DB_HOST`
+`DB_PORT`
+`PORT`
+
+
+`IS_PRODUCTION`
+`SERVERKEY`
+`CLIENTKEY`
 
 ## Note  
 
