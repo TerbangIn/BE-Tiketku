@@ -1,5 +1,6 @@
 const { flight } = require('../models')
 const axios = require('axios')
+const { Op } = require("sequelize")
 const getFlight = async (req, res) => {
     data = await flight.findAll({
         order: [["id", "Asc"]],
@@ -27,14 +28,120 @@ const getFlight = async (req, res) => {
     }
 }
 
-const filterTermurah = async (req,res) => {
+const filterFlight = async (req,res) => {
     try{
-        await axios.get()
-        data = req.body.data
-        
-        data.filter
+        let from = req.body.from
+        let to =  req.body.to
+        let category =  req.body.category
+        let day = new Date(req.body.date)
+        let nextday = new Date(req.body.date)
+        nextday.setDate(nextday.getDate() + 1)
+        if (category == 'economy'){
+            let data = await flight.findAll({
+                include: { all: true, nested: true },
+                where:{
+                    [Op.and]: {
+                        '$source.country$' : from,
+                        '$destination.country$' : to,
+                        'departure_date' : {
+                            [Op.and] : {
+                                [Op.gte] : day,
+                                [Op.lte] : nextday
+                            }
+                        },
+                        'economy_class_price' : {
+                            [Op.ne] : null
+                        }
+                    }
+                }
+            })
 
-    }catch{
+            return res.status(200).json({
+                status: "success",
+                data: data
+            })
+        } else if (category == 'premium economy'){
+            let data = await flight.findAll({
+                include: { all: true, nested: true },
+                where:{
+                    [Op.and]: {
+                        '$source.country$' : from,
+                        '$destination.country$' : to,
+                        'departure_date' : {
+                            [Op.and] : {
+                                [Op.gte] : day,
+                                [Op.lte] : nextday
+                            }
+                        },
+                        'premium_price' : {
+                            [Op.ne] : null
+                        }
+                    }
+                }
+            })
+
+            return res.status(200).json({
+                status: "success",
+                data: data
+            })
+        }else if(category == 'first class'){
+            let data = await flight.findAll({
+                include: { all: true, nested: true },
+                where:{
+                    [Op.and]: {
+                        '$source.country$' : from,
+                        '$destination.country$' : to,
+                        'departure_date' : {
+                            [Op.and] : {
+                                [Op.gte] : day,
+                                [Op.lte] : nextday
+                            }
+                        },
+                        'first_class_price' : {
+                            [Op.ne] : null
+                        }
+                    }
+                }
+            })
+
+            return res.status(200).json({
+                status: "success",
+                data: data
+            })
+        }else if (category === 'bussiness'){
+            let data = await flight.findAll({
+                include: { all: true, nested: true },
+                where:{
+                    [Op.and]: {
+                        '$source.country$' : from,
+                        '$destination.country$' : to,
+                        'departure_date' : {
+                            [Op.and] : {
+                                [Op.gte] : day,
+                                [Op.lte] : nextday
+                            }
+                        },
+                        'business_class_price' : {
+                            [Op.ne] : null
+                        }
+                    }
+                }
+            })
+
+            return res.status(200).json({
+                status: "success",
+                data: data
+            })
+        }else{
+
+            return res.status(400).json({
+                status: "success",
+                data: data
+            })
+        }
+
+
+    }catch(error){
         return res.status(400).json({
             status: "success",
             message: error.message
@@ -164,5 +271,6 @@ module.exports = {
     getIdFlight,
     postFlight,
     updateFlight,
-    deleteFlight
+    deleteFlight,
+    filterFlight
 }
