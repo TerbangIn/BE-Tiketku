@@ -5,7 +5,7 @@ const checkRole = require('../middleware/checkRole')
 
 router.get("/", auth, checkRole(["admin"]), userController.getUsers)
 router.get("/:id", auth, checkRole(["admin", "user"]), userController.getIdUser)
-router.get("/search/", auth, checkRole(["admin", "user"]), userController.getIdEmail)
+router.get("/", auth, checkRole(["admin", "user"]), userController.getIdEmail)
 router.post("/register", userController.postUser)
 router.post("/login", userController.login)
 router.put('/:id', auth, checkRole(["admin", "user"]), userController.updateUser)

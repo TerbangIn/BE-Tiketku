@@ -54,22 +54,22 @@ const getUsers = async (req, res) => {
 const getIdEmail = async (req, res) => {
   try {
     // const { name, price, stock } = req.body
-    const email = req.params.email
-    const data = await user.findOne({
-      where : {
-        email : {
-          email
-        }
-      }
-    }, {
-      include: { all: true, nested: true }
-    })
+    const email = req.query.email
+
+    // const data = await user.findOne({
+    //   where : {
+    //     email : {
+    //       email
+    //     }
+    //   }
+    // })
 
     // TODO: Validasi apakah id ada
     if (data !== null) {
       res.status(200).json({
         status: 'success',
-        data
+        msg: "awawaw",
+        email
       })
     } else {
       res.status(500).json({
