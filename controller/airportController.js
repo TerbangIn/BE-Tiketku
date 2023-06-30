@@ -26,6 +26,35 @@ const getAirport = async (req, res) => {
     }
 }
 
+const getIdByCity = async (req, res) => {
+    try {
+        const city = req.query.city
+        const data = await airport.findOne({
+            where : {
+                city
+            }
+        })
+
+        // TODO: Validasi apakah id ada
+        if (data === null) {
+            return res.status(404).json({
+                status: 'failed',
+                message: `Data dengan id ${id}, tidak ditemukan`
+            })
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "failed",
+            message: err.message
+        })
+    }
+}
+
 const getIdAirport = async (req, res) => {
     try {
         const id = req.params.id
@@ -195,6 +224,7 @@ const deleteAirport = async (req, res) => {
 }
 
 module.exports = {
+    getIdByCity,
     getAirport,
     getIdAirport,
     postAirport,

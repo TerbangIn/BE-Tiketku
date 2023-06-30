@@ -60,6 +60,8 @@ const getIdEmail = async (req, res) => {
       where : {
          email 
        }
+    },{
+      include: { all: true, nested: true }
     })
 
     // TODO: Validasi apakah id ada
