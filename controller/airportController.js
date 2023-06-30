@@ -116,7 +116,7 @@ const updateAirport = async (req, res) => {
 
         const nameAirport = await airport.findOne({
             where: {
-                id: id
+                name
             }
         })
 
@@ -129,9 +129,7 @@ const updateAirport = async (req, res) => {
 
         const codeAirport = await airport.findOne({
             where: {
-                id : {
-                    id
-                }
+                code
             }
         })
 
@@ -144,8 +142,8 @@ const updateAirport = async (req, res) => {
 
         await airport.update({
             name,
+            city,
             code,
-            city
             ...rest
         }, {
             where: {
