@@ -7,7 +7,7 @@ router.get("/", auth, checkRole(["admin", "user"]), Transaction.getTransaction)
 router.get("/:id", auth, checkRole(["admin", "user"]), Transaction.getIdTransaction)
 router.post("/payment/:id", auth, checkRole(["admin", "user"]), Transaction.getSnapRedirect)
 router.get('/payment/success', Transaction.midtransCallback)
-router.post("/", auth, checkRole(["admin"]), Transaction.postTransaction)
+router.post("/", auth, checkRole(["admin", "user"]), Transaction.postTransaction)
 router.put("/:id", auth, checkRole(["admin"]), Transaction.updateTransaction)
 router.delete("/:id", auth, checkRole(["admin"]), Transaction.deleteTransaction)
 
