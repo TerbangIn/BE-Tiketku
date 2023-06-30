@@ -51,6 +51,41 @@ const getUsers = async (req, res) => {
   }
 }
 
+const getIdEmail = async (req, res) => {
+  try {
+    // const { name, price, stock } = req.body
+    const email = req.params.email
+    const data = await user.findOne({
+      where : {
+        email : {
+          email
+        }
+      }
+    }, {
+      include: { all: true, nested: true }
+    })
+
+    // TODO: Validasi apakah id ada
+    if (data !== null) {
+      res.status(200).json({
+        status: 'success',
+        data
+      })
+    } else {
+      res.status(500).json({
+        status: 'failed',
+        message: `Data dengan id ${id}, tidak ditemukan`
+      })
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: "failed",
+      message: err.message
+    })
+  }
+}
+
+
 const getIdUser = async (req, res) => {
   try {
     // const { name, price, stock } = req.body
@@ -78,6 +113,7 @@ const getIdUser = async (req, res) => {
     })
   }
 }
+
 
 const postUser = async (req, res) => {
   const schema = Joi.object({
