@@ -101,7 +101,7 @@ const postAirport = async (req, res) => {
 
 const updateAirport = async (req, res) => {
     try {
-        const { name, code, ...rest } = req.body
+        const { name, code,city, ...rest } = req.body
         const id = req.params.id
 
         const dataId = await airport.findByPk(id)
@@ -116,7 +116,7 @@ const updateAirport = async (req, res) => {
 
         const nameAirport = await airport.findOne({
             where: {
-                name
+                id: id
             }
         })
 
@@ -129,7 +129,9 @@ const updateAirport = async (req, res) => {
 
         const codeAirport = await airport.findOne({
             where: {
-                code
+                id : {
+                    id
+                }
             }
         })
 
@@ -143,6 +145,7 @@ const updateAirport = async (req, res) => {
         await airport.update({
             name,
             code,
+            city
             ...rest
         }, {
             where: {
