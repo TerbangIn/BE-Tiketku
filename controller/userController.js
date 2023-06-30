@@ -58,9 +58,7 @@ const getIdEmail = async (req, res) => {
 
      const data = await user.findOne({
       where : {
-         email : {
-           email
-         }
+         email 
        }
     })
 
@@ -68,7 +66,7 @@ const getIdEmail = async (req, res) => {
     if (data !== null) {
       res.status(200).json({
         status: 'success',
-        email
+        data
       })
     } else {
       res.status(500).json({
