@@ -520,5 +520,6 @@ module.exports = {
   login,
   otp,
   verify,
+  getIdEmail,
   verifyForgetPassword
 }
