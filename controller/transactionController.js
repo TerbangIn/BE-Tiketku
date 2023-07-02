@@ -35,12 +35,12 @@ const getSnapRedirect = async (req, res) => {
             "gross_amount": dataId.total_price
         }
 
-        // let item_details = [{
-        //     "id": dataId.id,
-        //     "price": dataId.total_price,
-        //     "quantity": dataId.tiket.length,
-        //     "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
-        // }]
+        let item_details = [{
+            "id": dataId.id,
+            "price": dataId.total_price,
+            "quantity": dataId.tiket.length,
+            "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
+        }]
 
         let customer_details = {
             "first_name": dataId.users.first_name,
@@ -50,7 +50,7 @@ const getSnapRedirect = async (req, res) => {
 
         let midtrans_params = {
             "transaction_details": transaction_details,
-            // "item_details": item_details,
+            "item_details": item_details,
             "customer_details": customer_details,
             "enabled_payments": ['gopay', 'shopeepay']
         }
