@@ -5,7 +5,7 @@ const checkRole = require('../middleware/checkRole')
 
 router.get("/", auth, checkRole(["admin", "user"]), Transaction.getTransaction)
 router.get("/:id", auth, checkRole(["admin", "user"]), Transaction.getIdTransaction)
-router.post("/payment/:id", auth, checkRole(["admin", "user"]), Transaction.getSnapRedirect)
+router.post("/payment/:id", Transaction.getSnapRedirect)
 router.get('/payment/success', Transaction.midtransCallback)
 router.post("/", auth, checkRole(["admin", "user"]), Transaction.postTransaction)
 router.put("/:id", auth, checkRole(["admin"]), Transaction.updateTransaction)
