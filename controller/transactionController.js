@@ -56,7 +56,7 @@ const getSnapRedirect = async (req, res) => {
         }
 
 
-        await snap.postTransaction(midtrans_params)
+        await snap.createTransaction(midtrans_params)
             .then(async (transaction_response) => {
                 // transaction redirect_url
                 let redirectUrl = transaction_response.redirect_url;
