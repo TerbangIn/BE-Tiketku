@@ -32,12 +32,12 @@ const getSnapRedirect = async (req, res) => {
 
         let transaction_details = {
             "order_id": orderId,
-            "gross_amount": 10000
+            "gross_amount": dataId.total_price
         }
 
         let item_details = [{
-            "id": orderId,
-            "price": 10000,
+            "id": dataId.id,
+            "price": dataId.total_price,
             "quantity": dataId.tiket.length,
             "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
         }]
@@ -50,8 +50,8 @@ const getSnapRedirect = async (req, res) => {
 
         let midtrans_params = {
             "transaction_details": transaction_details,
-            "customer_details": customer_details,
             "item_details": item_details,
+            "customer_details": customer_details,
             "enabled_payments": ['gopay', 'shopeepay']
         }
 
