@@ -106,12 +106,16 @@ const midtransCallback = async (req,res) => {
             const id = orderId.split("-");
 
             // console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
-            const dataId = await transaction.findOne({where:{
-                id: id[0]
-            }},{
+            const dataId = await transaction.findByPk(id[0], {
                 include: { all: true, nested: true }
             })
-    
+
+            if (dataId === null) {
+                    res.status(404).json({
+                    status: 'failed',
+                    message: `Data dengan id ${id}, tidak ditemukan`
+                })
+            }
 
             if (transactionStatus == 'capture'){
             // capture only applies to card transaction, which you need to check for the fraudStatus
