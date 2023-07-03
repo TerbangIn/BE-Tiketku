@@ -11,6 +11,8 @@ let snap = new midtransClient.Snap({
     clientKey: process.env.CLIENTKEY
 })
 
+
+
 const getSnapRedirect = async (req, res) => {
     try {
         const id = req.params.id
@@ -35,12 +37,12 @@ const getSnapRedirect = async (req, res) => {
             "gross_amount": dataId.total_price
         }
 
-        let item_details = [{
-            "id": orderId,
-            "price": dataId.total_price,
-            "quantity": dataId.tiket.length,
-            "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
-        }]
+        // let item_details = [{
+        //     "id": dataId.id,
+        //     "price": dataId.total_price,
+        //     "quantity": dataId.tiket.length,
+        //     "name": "Payment for " + dataId.tiket[0].flight.airline + " - " + dataId.tiket.length + " tiket"
+        // }]
 
         let customer_details = {
             "first_name": dataId.users.first_name,
@@ -50,13 +52,13 @@ const getSnapRedirect = async (req, res) => {
 
         let midtrans_params = {
             "transaction_details": transaction_details,
+            // "item_details": item_details,
             "customer_details": customer_details,
-            "item_details": item_details,
             "enabled_payments": ['gopay', 'shopeepay']
         }
 
 
-        await snap.postTransaction(midtrans_params)
+        await snap.createTransaction(midtrans_params)
             .then(async (transaction_response) => {
                 // transaction redirect_url
                 let redirectUrl = transaction_response.redirect_url;
@@ -84,7 +86,19 @@ const getSnapRedirect = async (req, res) => {
 
 const midtransCallback = async (req,res) => {
     try{
-        await snap.transaction.notification(notificationJson)
+        let NotificationJson = {
+            'currency': req.body.currency,
+            'fraud_status': req.body.fraud_status,
+            'gross_amount': req.body.gross_amount,
+            'order_id': req.body.order_id,
+            'payment_type': req.body.payment_type,
+            'status_code': req.body.status_code,
+            'status_message': req.body.status_message,
+            'transaction_id': req.body.transaction_id,
+            'transaction_status': req.body.transaction_status,
+            'transaction_time': req.body.transaction_time
+        }
+        await snap.transaction.notification(NotificationJson)
         .then(async (statusResponse)=>{
             let orderId = statusResponse.order_id;
             let transactionStatus = statusResponse.transaction_status;
@@ -92,20 +106,23 @@ const midtransCallback = async (req,res) => {
             const id = orderId.split("-");
 
             // console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
-            const dataId = await transaction.findOne({where:{
-                id: id[0]
-            }},{
+            const dataId = await transaction.findByPk(id[0], {
                 include: { all: true, nested: true }
             })
-    
-            let status = ''
-    
-                if (transactionStatus == 'capture'){
-                    if (fraudStatus == 'challenge'){
-                        // TODO set transaction status on your databaase to 'challenge'
-                        status = 'pending'
-                        await transaction.update({
-                            payment_status: status,
+
+            if (dataId === null) {
+                    res.status(404).json({
+                    status: 'failed',
+                    message: `Data dengan id ${id}, tidak ditemukan`
+                })
+            }
+
+            if (transactionStatus == 'capture'){
+            // capture only applies to card transaction, which you need to check for the fraudStatus
+                if (fraudStatus == 'challenge'){
+                    // TODO set transaction status on your databaase to 'challenge'
+                    await transaction.update({
+                            payment_status: fraudStatus,
                         }, {
                             where: {
                                 id: id[0]
@@ -115,39 +132,74 @@ const midtransCallback = async (req,res) => {
                             status: 'success',
                             dataId
                         })
-
-                } else if (transactionStatus == 'cancel' ||
-                    transactionStatus == 'deny' ||
-                    transactionStatus == 'expire') {
-                    // TODO set transaction status on your databaase to 'failure'
-                    status = 'failed'
+                } else if (fraudStatus == 'accept'){
+                    // TODO set transaction status on your databaase to 'success'
                     await transaction.update({
-                        payment_status: status,
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.status(201).json({
-                        status: 'success',
-                        dataId
-                    })
-                } else if (transactionStatus == 'pending') {
-                    // TODO set transaction status on your databaase to 'pending' / waiting payment
-                    status = 'pending'
-                    await transaction.update({
-                        payment_status: status,
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.status(201).json({
-                        status: 'success',
-                        dataId
-                    })
+                            payment_status: 'success',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                        })
                 }
-
+            } else if (transactionStatus == 'settlement'){
+                // TODO set transaction status on your databaase to 'success'
+                await transaction.update({
+                            payment_status: 'success',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                        })
+            } else if (transactionStatus == 'deny'){
+                // TODO you can ignore 'deny', because most of the time it allows payment retries
+                // and later can become success
+                await transaction.update({
+                            payment_status: 'deny',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                    })
+            } else if (transactionStatus == 'cancel' ||
+            transactionStatus == 'expire'){
+                // TODO set transaction status on your databaase to 'failure'
+                await transaction.update({
+                            payment_status: 'failure',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                        })
+            } else if (transactionStatus == 'pending'){
+                // TODO set transaction status on your databaase to 'pending' / waiting payment
+                await transaction.update({
+                            payment_status: 'waiting',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.status(201).json({
+                            status: 'success',
+                            dataId
+                        })
             }
         })
     } catch (error) {
