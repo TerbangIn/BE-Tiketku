@@ -186,6 +186,7 @@ const midtransCallback = async (req, res) => {
             message: error.message
         })
     }
+}
 
 
 const postTransaction = async (req, res) => {
