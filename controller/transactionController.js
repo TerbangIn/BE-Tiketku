@@ -11,19 +11,7 @@ let snap = new midtransClient.Snap({
     clientKey: process.env.CLIENTKEY
 })
 
-let NotificationJson = {
-    'currency': 'IDR',
-    'fraud_status': 'accept',
-    'gross_amount': '24145.00',
-    'order_id': '1-x545',
-    'payment_type': 'gopay',
-    'status_code': '201',
-    'status_message': 'Success, Bank Transfer transaction is created',
-    'transaction_id': '6ee793df-9b1d-4343-8eda-cc9663b4222f',
-    'transaction_status': 'pending',
-    'transaction_time': '2018-10-24 15:34:33',
-    'va_numbers': [{'bank': 'bca', 'va_number': '490526303019299'}]
-}
+
 
 const getSnapRedirect = async (req, res) => {
     try {
@@ -98,6 +86,18 @@ const getSnapRedirect = async (req, res) => {
 
 const midtransCallback = async (req,res) => {
     try{
+        let NotificationJson = {
+            'currency': req.body.currency,
+            'fraud_status': req.body.fraud_status,
+            'gross_amount': req.body.gross_amount,
+            'order_id': req.body.order_id,
+            'payment_type': req.body.payment_type,
+            'status_code': req.body.status_code,
+            'status_message': req.body.status_message,
+            'transaction_id': req.body.transaction_id,
+            'transaction_status': req.body.transaction_status,
+            'transaction_time': req.body.transaction_time
+        }
         await snap.transaction.notification(NotificationJson)
         .then(async (statusResponse)=>{
             let orderId = statusResponse.order_id;
