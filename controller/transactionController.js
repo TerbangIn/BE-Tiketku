@@ -98,8 +98,8 @@ const midtransCallback = async (req, res) => {
         }
 
         let data = req.method == 'POST' ? await snap.transaction.notification(NotificationJson) :  await snap.transaction.status(req.query.order_id ? req.query.order_id : req.body.order_id)
-        let orderId = data.order_id;
-        let transactionStatus = data.transaction_status;
+        let orderId = data.order_id ? data.order_id : req.query.order_id;
+        let transactionStatus = data.transaction_status ? data.transaction_status : req.query.transaction_status;
         let fraudStatus = data.fraud_status;
         const id = orderId.split("-");
         const dataId = await transaction.findByPk(id[0], {
@@ -124,7 +124,7 @@ const midtransCallback = async (req, res) => {
                         id: id[0]
                     }
                 })
-                return res.redirect("https://terbang-in.netlify.app/payment-success")
+                res.redirect("https://terbang-in.netlify.app/payment-success")
             } else if (fraudStatus == 'accept') {
                 // TODO set transaction status on your databaase to 'success'
                 await transaction.update({
@@ -134,7 +134,7 @@ const midtransCallback = async (req, res) => {
                         id: id[0]
                     }
                 })
-                return res.redirect("https://terbang-in.netlify.app/payment-success")
+                res.redirect("https://terbang-in.netlify.app/payment-success")
             }
         } else if (transactionStatus == 'settlement') {
             // TODO set transaction status on your databaase to 'success'
@@ -145,7 +145,7 @@ const midtransCallback = async (req, res) => {
                     id: id[0]
                 }
             })
-            return res.redirect("https://terbang-in.netlify.app/payment-success")
+            res.redirect("https://terbang-in.netlify.app/payment-success")
         } else if (transactionStatus == 'deny') {
             // TODO you can ignore 'deny', because most of the time it allows payment retries
             // and later can become success
@@ -156,7 +156,7 @@ const midtransCallback = async (req, res) => {
                     id: id[0]
                 }
             })
-            return res.redirect("https://terbang-in.netlify.app/payment-success")
+            res.redirect("https://terbang-in.netlify.app/payment-success")
         } else if (transactionStatus == 'cancel' ||
             transactionStatus == 'expire') {
             // TODO set transaction status on your databaase to 'failure'
@@ -167,7 +167,7 @@ const midtransCallback = async (req, res) => {
                     id: id[0]
                 }
             })
-            return res.redirect("https://terbang-in.netlify.app/payment-success")
+            res.redirect("https://terbang-in.netlify.app/payment-success")
         } else if (transactionStatus == 'pending') {
             // TODO set transaction status on your databaase to 'pending' / waiting payment
             await transaction.update({
@@ -177,13 +177,14 @@ const midtransCallback = async (req, res) => {
                     id: id[0]
                 }
             })
-            return res.redirect("https://terbang-in.netlify.app/payment-success")
+            res.redirect("https://terbang-in.netlify.app/payment-success")
         }
         
     } catch (error) {
         res.status(400).json({
             status: "failed",
-            message: error.message
+            message: error.message,
+            method: req.method
         })
     }
 }
