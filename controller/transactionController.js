@@ -6,7 +6,7 @@ const midtransClient = require('midtrans-client');
 const Joi = require('joi');
 
 let snap = new midtransClient.Snap({
-    isProduction: true,
+    isProduction: false,
     serverKey: process.env.SERVERKEY,
     clientKey: process.env.CLIENTKEY
 })
