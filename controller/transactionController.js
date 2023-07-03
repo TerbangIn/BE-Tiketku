@@ -15,7 +15,7 @@ let NotificationJson = {
     'currency': 'IDR',
     'fraud_status': 'accept',
     'gross_amount': '24145.00',
-    'order_id': 'test-transaction-321',
+    'order_id': '1-x545',
     'payment_type': 'gopay',
     'status_code': '201',
     'status_message': 'Success, Bank Transfer transaction is created',
