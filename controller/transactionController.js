@@ -11,8 +11,6 @@ let snap = new midtransClient.Snap({
     clientKey: process.env.CLIENTKEY
 })
 
-
-
 const getSnapRedirect = async (req, res) => {
     try {
         const id = req.params.id
@@ -84,8 +82,8 @@ const getSnapRedirect = async (req, res) => {
     }
 }
 
-const midtransCallback = async (req,res) => {
-    try{
+const midtransCallback = async (req, res) => {
+    try {
         let NotificationJson = {
             'currency': req.body.currency,
             'fraud_status': req.body.fraud_status,
@@ -98,30 +96,30 @@ const midtransCallback = async (req,res) => {
             'transaction_status': req.body.transaction_status,
             'transaction_time': req.body.transaction_time
         }
+
         await snap.transaction.notification(NotificationJson)
-        .then(async (statusResponse)=>{
-            let orderId = statusResponse.order_id;
-            let transactionStatus = statusResponse.transaction_status;
-            let fraudStatus = statusResponse.fraud_status;
-            const id = orderId.split("-");
+            .then(async (statusResponse) => {
+                let orderId = statusResponse.order_id;
+                let transactionStatus = statusResponse.transaction_status;
+                let fraudStatus = statusResponse.fraud_status;
+                const id = orderId.split("-");
 
-            // console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
-            const dataId = await transaction.findByPk(id[0], {
-                include: { all: true, nested: true }
-            })
-
-            if (dataId === null) {
-                    res.status(404).json({
-                    status: 'failed',
-                    message: `Data dengan id ${id}, tidak ditemukan`
+                const dataId = await transaction.findByPk(id[0], {
+                    include: { all: true, nested: true }
                 })
-            }
 
-            if (transactionStatus == 'capture'){
-            // capture only applies to card transaction, which you need to check for the fraudStatus
-                if (fraudStatus == 'challenge'){
-                    // TODO set transaction status on your databaase to 'challenge'
-                    await transaction.update({
+                if (dataId === null) {
+                    res.status(404).json({
+                        status: 'failed',
+                        message: `Data dengan id ${id}, tidak ditemukan`
+                    })
+                }
+
+                if (transactionStatus == 'capture') {
+                    // capture only applies to card transaction, which you need to check for the fraudStatus
+                    if (fraudStatus == 'challenge') {
+                        // TODO set transaction status on your databaase to 'challenge'
+                        await transaction.update({
                             payment_status: fraudStatus,
                         }, {
                             where: {
@@ -129,61 +127,61 @@ const midtransCallback = async (req,res) => {
                             }
                         })
                         return res.redirect("https://terbang-in.netlify.app/payment-success")
-                } else if (fraudStatus == 'accept'){
+                    } else if (fraudStatus == 'accept') {
+                        // TODO set transaction status on your databaase to 'success'
+                        await transaction.update({
+                            payment_status: 'success',
+                        }, {
+                            where: {
+                                id: id[0]
+                            }
+                        })
+                        return res.redirect("https://terbang-in.netlify.app/payment-success")
+                    }
+                } else if (transactionStatus == 'settlement') {
                     // TODO set transaction status on your databaase to 'success'
                     await transaction.update({
-                            payment_status: 'success',
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                        })
-                        return res.redirect("https://terbang-in.netlify.app/payment-success")
-                }
-            } else if (transactionStatus == 'settlement'){
-                // TODO set transaction status on your databaase to 'success'
-                    await transaction.update({
-                            payment_status: 'success',
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                    })
-                    return res.redirect("https://terbang-in.netlify.app/payment-success")
-            } else if (transactionStatus == 'deny'){
-                // TODO you can ignore 'deny', because most of the time it allows payment retries
-                // and later can become success
-                await transaction.update({
-                            payment_status: 'deny',
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                        })
-                        return res.redirect("https://terbang-in.netlify.app/payment-success")
-            } else if (transactionStatus == 'cancel' ||
-            transactionStatus == 'expire'){
-                // TODO set transaction status on your databaase to 'failure'
-                await transaction.update({
-                            payment_status: 'failure',
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                        })
-                        return res.redirect("https://terbang-in.netlify.app/payment-success")
-            } else if (transactionStatus == 'pending'){
-                // TODO set transaction status on your databaase to 'pending' / waiting payment
-                await transaction.update({
-                            payment_status: 'waiting',
-                        }, {
-                            where: {
-                                id: id[0]
+                        payment_status: 'success',
+                    }, {
+                        where: {
+                            id: id[0]
                         }
                     })
-                return res.redirect("https://terbang-in.netlify.app/payment-success")
-            }
-        })
+                    return res.redirect("https://terbang-in.netlify.app/payment-success")
+                } else if (transactionStatus == 'deny') {
+                    // TODO you can ignore 'deny', because most of the time it allows payment retries
+                    // and later can become success
+                    await transaction.update({
+                        payment_status: 'deny',
+                    }, {
+                        where: {
+                            id: id[0]
+                        }
+                    })
+                    return res.redirect("https://terbang-in.netlify.app/payment-success")
+                } else if (transactionStatus == 'cancel' ||
+                    transactionStatus == 'expire') {
+                    // TODO set transaction status on your databaase to 'failure'
+                    await transaction.update({
+                        payment_status: 'failure',
+                    }, {
+                        where: {
+                            id: id[0]
+                        }
+                    })
+                    return res.redirect("https://terbang-in.netlify.app/payment-success")
+                } else if (transactionStatus == 'pending') {
+                    // TODO set transaction status on your databaase to 'pending' / waiting payment
+                    await transaction.update({
+                        payment_status: 'waiting',
+                    }, {
+                        where: {
+                            id: id[0]
+                        }
+                    })
+                    return res.redirect("https://terbang-in.netlify.app/payment-success")
+                }
+            })
     } catch (error) {
         res.status(400).json({
             status: "failed",
@@ -270,6 +268,7 @@ const getTransaction = async (req, res) => {
         let data = await transaction.findAll({
             include: { all: true, nested: true }
         })
+
         return res.status(200).json({
             status: 'success',
             data

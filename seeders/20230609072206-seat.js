@@ -2,7 +2,7 @@
 const { randSeatNumber } = require('@ngneat/falso');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -14,14 +14,14 @@ module.exports = {
     */
     // const { v4: uuidv4 } = require('uuid');
     const dummy = []
-    for (let i = 0; i < 3;i++){
-      for (let j = 1; j <= 6;j++){
-        let result = `${(i+10).toString(36).toUpperCase()}${j}`
+    for (let i = 0; i < 3; i++) {
+      for (let j = 1; j <= 6; j++) {
+        let result = `${(i + 10).toString(36).toUpperCase()}${j}`
         dummy.push(result)
       }
     }
 
-    for (let i = 1; i <= 9; i++){
+    for (let i = 1; i <= 9; i++) {
       Promise.all(
         dummy.map(async (data) => {
           await queryInterface.bulkInsert('seats', [{
@@ -34,11 +34,9 @@ module.exports = {
         })
       )
     }
-      
-    
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *

@@ -12,5 +12,4 @@ router.post("/", auth, checkRole(["admin", "user"]), Transaction.postTransaction
 router.put("/:id", auth, checkRole(["admin"]), Transaction.updateTransaction)
 router.delete("/:id", auth, checkRole(["admin"]), Transaction.deleteTransaction)
 
-
 module.exports = router

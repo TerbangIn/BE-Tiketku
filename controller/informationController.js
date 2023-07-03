@@ -93,6 +93,7 @@ const updateInformation = async (req, res) => {
         id
       }
     })
+
     res.status(200).json({
       status: 'success',
       message: `Data dengan index ${id} telah berhasil terupdate`

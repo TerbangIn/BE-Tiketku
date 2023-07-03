@@ -172,7 +172,7 @@ const postUser = async (req, res) => {
           email
         }
       })
-      // transporter.verify().then(console.log).catch(console.error);
+
       const mailData = {
         from: process.env.EMAIL,
         to: email,
@@ -278,7 +278,6 @@ const updateUser = async (req, res) => {
         }
       })
 
-      // console.log(Email.dataValues);
       // TODO: Validasi apakah email sudah ada
       if (Email !== null && Email.dataValues.id !== Number(id)) {
         return res.status(400).json({
@@ -306,7 +305,6 @@ const updateUser = async (req, res) => {
       })
     }
   } else {
-    // console.log(val);
     const message = val.error.details[0].message
     res.status(400).json({
       status: "failed",
@@ -382,8 +380,7 @@ const otp = async (req, res) => {
         email
       }
     })
-    const dataId = await user.findOne({ where: { email } })
-    // transporter.verify().then(console.log).catch(console.error);
+
     const mailData = {
       from: process.env.EMAIL,
       to: email,
@@ -391,7 +388,7 @@ const otp = async (req, res) => {
       text: `This is Your OTP`,
       html: `<b> ${otp} </b>`
     }
-    // console.log(process.env.EMAIL)
+
     await transporter.sendMail(mailData, async (err, info) => {
       if (err) {
         res.status(400).json({
@@ -468,7 +465,6 @@ const login = async (req, res) => {
       })
     }
 
-    // console.log(bcrypt.compareSync(password, users.password), password, users.password);
     if (users && bcrypt.compareSync(password, users.password)) {
       if (users.verified) {
         const token = jwt.sign({

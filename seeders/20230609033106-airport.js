@@ -15,7 +15,6 @@ module.exports = {
      * }], {});
     */
 
-
     await queryInterface.bulkInsert('airports', [
       {
         name: "Bandar Udara Internasional Soekarno–Hatta",
@@ -181,8 +180,6 @@ module.exports = {
       },
     ],);
   },
-
-
 
   async down(queryInterface, Sequelize) {
     /**

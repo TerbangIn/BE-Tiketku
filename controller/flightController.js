@@ -28,29 +28,30 @@ const getFlight = async (req, res) => {
     }
 }
 
-const filterFlight = async (req,res) => {
-    try{
+const filterFlight = async (req, res) => {
+    try {
         let from = req.body.from
-        let to =  req.body.to
-        let category =  req.body.category
+        let to = req.body.to
+        let category = req.body.category
         let day = new Date(req.body.date)
         let nextday = new Date(req.body.date)
         nextday.setDate(nextday.getDate() + 1)
-        if (category == 'economy'){
+
+        if (category == 'economy') {
             let data = await flight.findAll({
                 include: { all: true, nested: true },
-                where:{
+                where: {
                     [Op.and]: {
-                        '$source.country$' : from,
-                        '$destination.country$' : to,
-                        'departure_date' : {
-                            [Op.and] : {
-                                [Op.gte] : day,
-                                [Op.lte] : nextday
+                        '$source.country$': from,
+                        '$destination.country$': to,
+                        'departure_date': {
+                            [Op.and]: {
+                                [Op.gte]: day,
+                                [Op.lte]: nextday
                             }
                         },
-                        'economy_class_price' : {
-                            [Op.ne] : null
+                        'economy_class_price': {
+                            [Op.ne]: null
                         }
                     }
                 }
@@ -60,21 +61,21 @@ const filterFlight = async (req,res) => {
                 status: "success",
                 data: data
             })
-        } else if (category == 'premium economy'){
+        } else if (category == 'premium economy') {
             let data = await flight.findAll({
                 include: { all: true, nested: true },
-                where:{
+                where: {
                     [Op.and]: {
-                        '$source.country$' : from,
-                        '$destination.country$' : to,
-                        'departure_date' : {
-                            [Op.and] : {
-                                [Op.gte] : day,
-                                [Op.lte] : nextday
+                        '$source.country$': from,
+                        '$destination.country$': to,
+                        'departure_date': {
+                            [Op.and]: {
+                                [Op.gte]: day,
+                                [Op.lte]: nextday
                             }
                         },
-                        'premium_price' : {
-                            [Op.ne] : null
+                        'premium_price': {
+                            [Op.ne]: null
                         }
                     }
                 }
@@ -84,21 +85,21 @@ const filterFlight = async (req,res) => {
                 status: "success",
                 data: data
             })
-        }else if(category == 'first class'){
+        } else if (category == 'first class') {
             let data = await flight.findAll({
                 include: { all: true, nested: true },
-                where:{
+                where: {
                     [Op.and]: {
-                        '$source.country$' : from,
-                        '$destination.country$' : to,
-                        'departure_date' : {
-                            [Op.and] : {
-                                [Op.gte] : day,
-                                [Op.lte] : nextday
+                        '$source.country$': from,
+                        '$destination.country$': to,
+                        'departure_date': {
+                            [Op.and]: {
+                                [Op.gte]: day,
+                                [Op.lte]: nextday
                             }
                         },
-                        'first_class_price' : {
-                            [Op.ne] : null
+                        'first_class_price': {
+                            [Op.ne]: null
                         }
                     }
                 }
@@ -108,21 +109,21 @@ const filterFlight = async (req,res) => {
                 status: "success",
                 data: data
             })
-        }else if (category === 'bussiness'){
+        } else if (category === 'bussiness') {
             let data = await flight.findAll({
                 include: { all: true, nested: true },
-                where:{
+                where: {
                     [Op.and]: {
-                        '$source.country$' : from,
-                        '$destination.country$' : to,
-                        'departure_date' : {
-                            [Op.and] : {
-                                [Op.gte] : day,
-                                [Op.lte] : nextday
+                        '$source.country$': from,
+                        '$destination.country$': to,
+                        'departure_date': {
+                            [Op.and]: {
+                                [Op.gte]: day,
+                                [Op.lte]: nextday
                             }
                         },
-                        'business_class_price' : {
-                            [Op.ne] : null
+                        'business_class_price': {
+                            [Op.ne]: null
                         }
                     }
                 }
@@ -132,16 +133,14 @@ const filterFlight = async (req,res) => {
                 status: "success",
                 data: data
             })
-        }else{
+        } else {
 
             return res.status(400).json({
                 status: "success",
                 data: data
             })
         }
-
-
-    }catch(error){
+    } catch (error) {
         return res.status(400).json({
             status: "success",
             message: error.message
@@ -152,6 +151,7 @@ const filterFlight = async (req,res) => {
 const getIdFlight = async (req, res) => {
     try {
         const id = req.params.id
+
         const data = await flight.findByPk(id,
             {
                 include: { all: true, nested: true }
@@ -202,8 +202,6 @@ const updateFlight = async (req, res) => {
     try {
         const datas = req.body
         const id = req.params.id
-
-        console.log(datas);
 
         const dataId = await flight.findByPk(id)
 

@@ -3537,7 +3537,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "example": "Data tiket berhasil ditambahkan"
+                      "example": "Transaction Telah Dibuat Silahkan Anda Melakukan Pembayaraan"
                     },
                     "link": {
                       "type": "string",
