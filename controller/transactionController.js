@@ -97,98 +97,96 @@ const midtransCallback = async (req, res) => {
             'transaction_time': req.body.transaction_time
         }
 
-        await snap.transaction.notification(NotificationJson)
-            .then(async (statusResponse) => {
-                let orderId = statusResponse.order_id;
-                let transactionStatus = statusResponse.transaction_status;
-                let fraudStatus = statusResponse.fraud_status;
-                const id = orderId.split("-");
+        let data = req.method == 'POST' ? await snap.transaction.notification(NotificationJson) :  await snap.transaction.status(req.query.order_id ? req.query.order_id : req.body.order_id)
+        let orderId = data.order_id;
+        let transactionStatus = data.transaction_status;
+        let fraudStatus = data.fraud_status;
+        const id = orderId.split("-");
+        const dataId = await transaction.findByPk(id[0], {
+            include: { all: true, nested: true }
+        })
 
-                const dataId = await transaction.findByPk(id[0], {
-                    include: { all: true, nested: true }
-                })
+        if (dataId === null) {
+            res.status(404).json({
+                status: 'failed',
+                message: `Data dengan id ${id}, tidak ditemukan`
+            })
+        }
 
-                if (dataId === null) {
-                    res.status(404).json({
-                        status: 'failed',
-                        message: `Data dengan id ${id}, tidak ditemukan`
-                    })
-                }
-
-                if (transactionStatus == 'capture') {
-                    // capture only applies to card transaction, which you need to check for the fraudStatus
-                    if (fraudStatus == 'challenge') {
-                        // TODO set transaction status on your databaase to 'challenge'
-                        await transaction.update({
-                            payment_status: fraudStatus,
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                        })
-                        return res.redirect("https://terbang-in.netlify.app/payment-success")
-                    } else if (fraudStatus == 'accept') {
-                        // TODO set transaction status on your databaase to 'success'
-                        await transaction.update({
-                            payment_status: 'success',
-                        }, {
-                            where: {
-                                id: id[0]
-                            }
-                        })
-                        return res.redirect("https://terbang-in.netlify.app/payment-success")
+        if (transactionStatus == 'capture') {
+            // capture only applies to card transaction, which you need to check for the fraudStatus
+            if (fraudStatus == 'challenge') {
+                // TODO set transaction status on your databaase to 'challenge'
+                await transaction.update({
+                    payment_status: fraudStatus,
+                }, {
+                    where: {
+                        id: id[0]
                     }
-                } else if (transactionStatus == 'settlement') {
-                    // TODO set transaction status on your databaase to 'success'
-                    await transaction.update({
-                        payment_status: 'success',
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.redirect("https://terbang-in.netlify.app/payment-success")
-                } else if (transactionStatus == 'deny') {
-                    // TODO you can ignore 'deny', because most of the time it allows payment retries
-                    // and later can become success
-                    await transaction.update({
-                        payment_status: 'deny',
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.redirect("https://terbang-in.netlify.app/payment-success")
-                } else if (transactionStatus == 'cancel' ||
-                    transactionStatus == 'expire') {
-                    // TODO set transaction status on your databaase to 'failure'
-                    await transaction.update({
-                        payment_status: 'failure',
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.redirect("https://terbang-in.netlify.app/payment-success")
-                } else if (transactionStatus == 'pending') {
-                    // TODO set transaction status on your databaase to 'pending' / waiting payment
-                    await transaction.update({
-                        payment_status: 'waiting',
-                    }, {
-                        where: {
-                            id: id[0]
-                        }
-                    })
-                    return res.redirect("https://terbang-in.netlify.app/payment-success")
+                })
+                return res.redirect("https://terbang-in.netlify.app/payment-success")
+            } else if (fraudStatus == 'accept') {
+                // TODO set transaction status on your databaase to 'success'
+                await transaction.update({
+                    payment_status: 'success',
+                }, {
+                    where: {
+                        id: id[0]
+                    }
+                })
+                return res.redirect("https://terbang-in.netlify.app/payment-success")
+            }
+        } else if (transactionStatus == 'settlement') {
+            // TODO set transaction status on your databaase to 'success'
+            await transaction.update({
+                payment_status: 'success',
+            }, {
+                where: {
+                    id: id[0]
                 }
             })
+            return res.redirect("https://terbang-in.netlify.app/payment-success")
+        } else if (transactionStatus == 'deny') {
+            // TODO you can ignore 'deny', because most of the time it allows payment retries
+            // and later can become success
+            await transaction.update({
+                payment_status: 'deny',
+            }, {
+                where: {
+                    id: id[0]
+                }
+            })
+            return res.redirect("https://terbang-in.netlify.app/payment-success")
+        } else if (transactionStatus == 'cancel' ||
+            transactionStatus == 'expire') {
+            // TODO set transaction status on your databaase to 'failure'
+            await transaction.update({
+                payment_status: 'failure',
+            }, {
+                where: {
+                    id: id[0]
+                }
+            })
+            return res.redirect("https://terbang-in.netlify.app/payment-success")
+        } else if (transactionStatus == 'pending') {
+            // TODO set transaction status on your databaase to 'pending' / waiting payment
+            await transaction.update({
+                payment_status: 'waiting',
+            }, {
+                where: {
+                    id: id[0]
+                }
+            })
+            return res.redirect("https://terbang-in.netlify.app/payment-success")
+        }
+        
     } catch (error) {
         res.status(400).json({
             status: "failed",
             message: error.message
         })
     }
-}
+
 
 const postTransaction = async (req, res) => {
     const schema = Joi.object({
