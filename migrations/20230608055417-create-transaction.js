@@ -21,15 +21,11 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM(['Unpaid','Issued','Cancelled']),
-        defaultValue: 'Unpaid'
+        type: Sequelize.STRING,
+        defaultValue: 'waiting'
       },
       total_price: {
         type: Sequelize.DOUBLE
-      },
-      payment_status:{
-        type: Sequelize.STRING,
-        defaultValue: 'waiting'
       },
       midtrans_url:{
         type: Sequelize.STRING,

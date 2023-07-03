@@ -34,7 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.STRING,
     total_price: DataTypes.DOUBLE,
     kode_booking: DataTypes.STRING,
-    payment_status: DataTypes.STRING,
     midtrans_url: DataTypes.STRING,
     midtrans_booking_code: DataTypes.STRING,
   }, {
