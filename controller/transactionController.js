@@ -128,10 +128,7 @@ const midtransCallback = async (req,res) => {
                                 id: id[0]
                             }
                         })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                        })
+                        return res.redirect("https://terbang-in.netlify.app/payment-success")
                 } else if (fraudStatus == 'accept'){
                     // TODO set transaction status on your databaase to 'success'
                     await transaction.update({
@@ -141,24 +138,18 @@ const midtransCallback = async (req,res) => {
                                 id: id[0]
                             }
                         })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                        })
+                        return res.redirect("https://terbang-in.netlify.app/payment-success")
                 }
             } else if (transactionStatus == 'settlement'){
                 // TODO set transaction status on your databaase to 'success'
-                await transaction.update({
+                    await transaction.update({
                             payment_status: 'success',
                         }, {
                             where: {
                                 id: id[0]
                             }
-                        })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                        })
+                    })
+                    return res.redirect("https://terbang-in.netlify.app/payment-success")
             } else if (transactionStatus == 'deny'){
                 // TODO you can ignore 'deny', because most of the time it allows payment retries
                 // and later can become success
@@ -169,10 +160,7 @@ const midtransCallback = async (req,res) => {
                                 id: id[0]
                             }
                         })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                    })
+                        return res.redirect("https://terbang-in.netlify.app/payment-success")
             } else if (transactionStatus == 'cancel' ||
             transactionStatus == 'expire'){
                 // TODO set transaction status on your databaase to 'failure'
@@ -183,10 +171,7 @@ const midtransCallback = async (req,res) => {
                                 id: id[0]
                             }
                         })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                        })
+                        return res.redirect("https://terbang-in.netlify.app/payment-success")
             } else if (transactionStatus == 'pending'){
                 // TODO set transaction status on your databaase to 'pending' / waiting payment
                 await transaction.update({
@@ -194,12 +179,9 @@ const midtransCallback = async (req,res) => {
                         }, {
                             where: {
                                 id: id[0]
-                            }
-                        })
-                        return res.status(201).json({
-                            status: 'success',
-                            dataId
-                        })
+                        }
+                    })
+                return res.redirect("https://terbang-in.netlify.app/payment-success")
             }
         })
     } catch (error) {
