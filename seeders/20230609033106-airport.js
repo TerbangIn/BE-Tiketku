@@ -4,7 +4,7 @@ const { randAirport } = require('@ngneat/falso');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -14,18 +14,19 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
- 
- 
-    await queryInterface.bulkInsert('airports', [{
-         name: "Bandar Udara Internasional Soekarno–Hatta",
-         code: "CGK",
-         city: "Banten",
-         country: "Indonesia",
-         continent: "Asia",
-         createdAt: new Date(),
-         updatedAt: new Date()
-       },
-       {
+
+
+    await queryInterface.bulkInsert('airports', [
+      {
+        name: "Bandar Udara Internasional Soekarno–Hatta",
+        code: "CGK",
+        city: "Banten",
+        country: "Indonesia",
+        continent: "Asia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
         name: "Bandar Udara Internasional Ngurah Rai",
         code: "DPS",
         city: "Denpasar",
@@ -106,7 +107,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      
       {
         name: "Madrid Barajas Airport",
         code: "MAD",
@@ -134,7 +134,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-
       {
         name: "Kairo Internasional Airport",
         code: "CAI",
@@ -182,10 +181,10 @@ module.exports = {
       },
     ],);
   },
-     
-    
 
-  async down (queryInterface, Sequelize) {
+
+
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *

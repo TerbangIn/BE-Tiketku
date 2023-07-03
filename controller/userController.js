@@ -56,11 +56,11 @@ const getIdEmail = async (req, res) => {
     // const { name, price, stock } = req.body
     const email = req.query.email
 
-     const data = await user.findOne({
-      where : {
-         email 
-       }
-    },{
+    const data = await user.findOne({
+      where: {
+        email
+      }
+    }, {
       include: { all: true, nested: true }
     })
 
@@ -277,15 +277,10 @@ const updateUser = async (req, res) => {
           email
         }
       })
-      // const userId = await user.findOne({
-      //   where: {
-      //     id
-      //   }
-      // })
 
-      // console.log(Email.dataValues === userId.dataValues);
+      // console.log(Email.dataValues);
       // TODO: Validasi apakah email sudah ada
-      if (Email !== null && Email.dataValues.id === Number(id)) {
+      if (Email !== null && Email.dataValues.id !== Number(id)) {
         return res.status(400).json({
           status: 'failed',
           message: `Email ${email} sudah ada`

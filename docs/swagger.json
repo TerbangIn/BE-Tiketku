@@ -1208,6 +1208,91 @@
         ]
       }
     },
+    "/flight/filter": {
+      "get": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Get flights",
+        "description": "Get all flights.",
+        "operationId": "getAllFlight",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "example": "Indonesia"
+                  },
+                  "to": {
+                    "type": "string",
+                    "example": "Korea"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "economy"
+                  },
+                  "date": {
+                    "type": "string",
+                    "example": "2023-06-27"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success get all flights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Flights"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No available data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/airport/": {
       "get": {
         "tags": [
@@ -3127,7 +3212,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "example": "Data tiket berhasil ditambahkan"
+                      "example": "Data transaction berhasil ditambahkan"
                     },
                     "data": {
                       "type": "object",
@@ -3410,6 +3495,95 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/transaksi/payment/{id}": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "summary": "Create data payment",
+        "description": "Can create payment data.",
+        "operationId": "createPayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of transaction to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success create data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Data tiket berhasil ditambahkan"
+                    },
+                    "link": {
+                      "type": "string",
+                      "example": "https://app.midtrans.com/payment-link/123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Invalid input supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Terjadi kesalahan pada server"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Res400"
                 }
               }
             }
