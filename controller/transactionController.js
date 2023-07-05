@@ -118,7 +118,7 @@ const midtransCallback = async (req, res) => {
             if (fraudStatus == 'challenge') {
                 // TODO set transaction status on your databaase to 'challenge'
                 await transaction.update({
-                    status: fraudStatus,
+                    payment_status: fraudStatus,
                 }, {
                     where: {
                         id: id[0]
@@ -128,7 +128,7 @@ const midtransCallback = async (req, res) => {
             } else if (fraudStatus == 'accept') {
                 // TODO set transaction status on your databaase to 'success'
                 await transaction.update({
-                    status: 'success',
+                    payment_status: 'success',
                 }, {
                     where: {
                         id: id[0]
@@ -139,7 +139,7 @@ const midtransCallback = async (req, res) => {
         } else if (transactionStatus == 'settlement') {
             // TODO set transaction status on your databaase to 'success'
             await transaction.update({
-                status: 'success',
+                payment_status: 'success',
             }, {
                 where: {
                     id: id[0]
@@ -150,7 +150,7 @@ const midtransCallback = async (req, res) => {
             // TODO you can ignore 'deny', because most of the time it allows payment retries
             // and later can become success
             await transaction.update({
-                status: 'deny',
+                payment_status: 'deny',
             }, {
                 where: {
                     id: id[0]
@@ -161,7 +161,7 @@ const midtransCallback = async (req, res) => {
             transactionStatus == 'expire') {
             // TODO set transaction status on your databaase to 'failure'
             await transaction.update({
-                status: 'failure',
+                payment_status: 'failure',
             }, {
                 where: {
                     id: id[0]
@@ -171,7 +171,7 @@ const midtransCallback = async (req, res) => {
         } else if (transactionStatus == 'pending') {
             // TODO set transaction status on your databaase to 'pending' / waiting payment
             await transaction.update({
-                status: 'waiting',
+                payment_status: 'waiting',
             }, {
                 where: {
                     id: id[0]

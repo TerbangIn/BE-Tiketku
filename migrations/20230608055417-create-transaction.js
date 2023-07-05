@@ -20,10 +20,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      status: {
-        type: Sequelize.STRING,
-        defaultValue: 'waiting'
-      },
       total_price: {
         type: Sequelize.DOUBLE
       },
@@ -34,6 +30,10 @@ module.exports = {
       midtrans_booking_code:{
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      payment_status:{
+        type: Sequelize.STRING,
+        defaultValue: 'waiting'
       },
       createdAt: {
         allowNull: false,

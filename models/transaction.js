@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) => {
   transaction.init({
     payment_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
-    status: DataTypes.STRING,
     total_price: DataTypes.DOUBLE,
     kode_booking: DataTypes.STRING,
     midtrans_url: DataTypes.STRING,
     midtrans_booking_code: DataTypes.STRING,
+    payment_status: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'transaction',
