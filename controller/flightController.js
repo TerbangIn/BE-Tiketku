@@ -131,18 +131,21 @@ const filterFlight = async (req, res) => {
 
             return res.status(200).json({
                 status: "success",
-                data: data
+                data
             })
         } else {
+            let data = await flight.findAll({
+                include: { all: true, nested: true }
+            })
 
-            return res.status(400).json({
+            return res.status(200).json({
                 status: "success",
-                data: data
+                data
             })
         }
     } catch (error) {
         return res.status(400).json({
-            status: "success",
+            status: "failed",
             message: error.message
         })
     }
