@@ -134,13 +134,9 @@ const filterFlight = async (req, res) => {
                 data
             })
         } else {
-            let data = await flight.findAll({
-                include: { all: true, nested: true }
-            })
-
             return res.status(200).json({
-                status: "success",
-                data
+                message: "Data tidak ditemukan",
+                data: []
             })
         }
     } catch (error) {

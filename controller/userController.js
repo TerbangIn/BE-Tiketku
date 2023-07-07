@@ -84,7 +84,6 @@ const getIdEmail = async (req, res) => {
   }
 }
 
-
 const getIdUser = async (req, res) => {
   try {
     // const { name, price, stock } = req.body
@@ -112,7 +111,6 @@ const getIdUser = async (req, res) => {
     })
   }
 }
-
 
 const postUser = async (req, res) => {
   const schema = Joi.object({
@@ -398,7 +396,7 @@ const otp = async (req, res) => {
       }
       res.status(200).json({
         status: 'success',
-        message: info.response
+        message: "OTP sudah dikirimkan ke email anda"
       })
     })
 
